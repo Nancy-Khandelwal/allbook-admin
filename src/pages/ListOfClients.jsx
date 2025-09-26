@@ -16,6 +16,7 @@ import Loading from '../components/Loading';
 import ExportButtons from '../components/Export';
 import Pagination from '../components/Pagination';
 import { useLocation } from "react-router-dom";
+
 const ListOfClients = () => {
 
   const [addAccount, setAddAccount] = useState(false);
