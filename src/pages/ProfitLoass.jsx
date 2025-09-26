@@ -1,0 +1,16 @@
+import React from 'react'
+
+const ProfitLoass = () => {
+  return (
+    <div className='w-full p-3'>
+        <div className='live-bets-report listing-grid report-wrapper'>
+                <div className="row"><div className="col-12"><div className="page-title-box pb-0 flex items-center justify-between"><h4 className="mb-0 text-[18px]">Casino Report</h4> <div className="page-title-right"></div></div></div></div>
+                <div className="row"><div className="col-12"><div className="card"><div className="card-body"><form data-vv-scope="InserUserAccount" method="post"><div className="row row5"><div className="form-group col-md-3"><select className="custom-select" id="__BVID__756"><option value="all">All</option><option value="user">User</option></select></div> <div className="form-group col-md-9"><button type="button" className="btn btn-primary">Load</button></div></div></form> <div className="row"><div className="col-sm-12 col-md-12"><div id="tickets-table_filter" className="dataTables_filter text-md-right"><label className="d-inline-flex align-items-center">
+                    Search:
+                    <input type="search" placeholder="Search..." className="form-control ml-2 form-control" id="__BVID__757" /></label></div></div></div> <div className="table-responsive mb-0 report-table"><table id="plTbl" role="table" aria-busy="false" aria-colcount="7" className="table b-table no-footer table-hover table-striped table-bordered"><thead role="rowgroup" className=""><tr role="row" className=""><th role="columnheader" scope="col" aria-colindex="1" className=""><div>No</div></th><th role="columnheader" scope="col" aria-colindex="2" className=""><div>User Name</div></th><th role="columnheader" scope="col" aria-colindex="3" className=""><div>Level</div></th><th role="columnheader" scope="col" aria-colindex="4" className="text-right"><div>Casino Pts</div></th><th role="columnheader" scope="col" aria-colindex="5" className="text-right"><div>Sport Pts</div></th><th role="columnheader" scope="col" aria-colindex="6" className="text-right"><div>Third Party Pts</div></th><th role="columnheader" scope="col" aria-colindex="7" className="text-right"><div>Profit/Loss</div></th></tr></thead><tbody role="rowgroup"><tr role="row" className="b-table-empty-row"><td colspan="7" role="cell" className=""><div role="alert" aria-live="polite"><p className="text-center mb-0">No data available in table</p></div></td></tr></tbody><tfoot role="rowgroup" className=""><tr role="row" className=""><th role="columnheader" scope="col" aria-colindex="1" className=""><span></span></th><th role="columnheader" scope="col" aria-colindex="2" className=""><span></span></th><th role="columnheader" scope="col" aria-colindex="3" className=""><span></span></th><th role="columnheader" scope="col" aria-colindex="4" className="text-right"><span></span></th><th role="columnheader" scope="col" aria-colindex="5" className="text-right"><span></span></th><th role="columnheader" scope="col" aria-colindex="6" className="text-right"><span></span></th><th role="columnheader" scope="col" aria-colindex="7" className="text-right"><span></span></th></tr></tfoot></table></div></div></div></div></div>
+        </div>
+    </div>
+  )
+}
+
+export default ProfitLoass

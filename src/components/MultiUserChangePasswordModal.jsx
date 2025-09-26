@@ -1,0 +1,13 @@
+import React from 'react';
+import {Icon} from '@iconify/react';
+import signinIcon from '@images/sign-in-icon.svg'
+
+const MultiUserChangePasswordModal = ({onClose}) => {
+  return (
+    <div id="__BVID__243" role="dialog" aria-describedby="__BVID__243___BV_modal_body_" class="modal fade show !block" aria-modal="true"><div class="modal-dialog modal-md modal-dialog-scrollable"><span tabIndex="0"></span><div id="__BVID__243___BV_modal_content_" tabIndex="-1" class="modal-content"><header id="__BVID__243___BV_modal_header_" class="modal-header"><h4 class="modal-title">Change Password</h4> <button type="button" data-dismiss="modal" class="close text-white p-0 m-0" onClick={onClose}>×</button></header><div id="__BVID__243___BV_modal_body_" class="modal-body"> <form data-vv-scope="UserChangePassword" method="post"><div class="form-group row"><label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">Password</label> <div class="col-8 form-group-feedback form-group-feedback-right"><input type="password" placeholder='Password' name="userchangepasswordpassword" data-vv-as="Password" class="form-control" aria-required="false" aria-invalid="false" /> </div></div> <div class="form-group row"><label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">Confirm Password</label> <div class="col-8 form-group-feedback form-group-feedback-right"><input type="password" placeholder='Confirm Password' name="userchangepasswordcpassword" data-vv-as="Confirm Password" class="form-control" aria-required="true" aria-invalid="false" /></div></div> <div class="form-group row"><label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">Transaction Code</label> <div class="col-8 form-group-feedback form-group-feedback-right"><input type="password" placeholder='Transaction Code' name="userchangepasswordmpassword" data-vv-as="Transaction Code" class="form-control" aria-required="true" aria-invalid="false" /> </div></div> <div class="form-group row"><div class="col-12 text-right"> <button type="submit" class="btn btn-primary" onClick={onClose}>
+                    submit
+                    <img src={signinIcon} alt="sign-in" className='inline ml-1 min-w-[18px] h-[18px]' /></button></div></div></form></div></div><span tabIndex="0"></span></div></div>
+  )
+}
+
+export default MultiUserChangePasswordModal
