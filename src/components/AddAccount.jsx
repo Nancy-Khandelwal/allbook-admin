@@ -8,11 +8,15 @@ import * as yup from 'yup';
 import { useUser } from "../components/contexts/UserContext";
 import { ACCOUNT_ROLES, getCreatableRoles } from "./constant/accountRoles"
 import signinIcon from '@images/sign-in-icon.svg'
+import { useNavigate, useLocation } from "react-router-dom";
 
 const schema = yup.object().shape({
   username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required")
-    .min(8, "Password must be at least 8 characters"),
+    .min(8, "Password must be at least 8 characters")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number"),
   rePassword: yup
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
@@ -54,13 +58,14 @@ const schema = yup.object().shape({
 //     </div>
 //   );
 // };
-const AddAccount = () => {
+const AddAccount = ({onBack,redirectionUrl}) => {
   const { apiCall } = useApi();
   const { toastSuccess, toastError } = useToast();
   const [loading, setLoading] = useState(false);
   const cookies = new Cookies();
   const { userData } = useUser();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const currentRoleObj = userData
     ? ACCOUNT_ROLES.find(r => r.value === userData?.role)
     : null;
@@ -106,6 +111,9 @@ const AddAccount = () => {
       if (result && result.success) {
         toastSuccess(result.msg || "Account created successfully");
         reset();
+        onBack();
+     navigate(redirectionUrl);
+
       } else {
         toastError((result && result.msg) || "Something went wrong");
       }

@@ -15,7 +15,7 @@ import autoTable from "jspdf-autotable";
 import Loading from '../components/Loading';
 import ExportButtons from '../components/Export';
 import Pagination from '../components/Pagination';
-
+import { useLocation } from "react-router-dom";
 const ListOfClients = () => {
 
   const [addAccount, setAddAccount] = useState(false);
@@ -24,7 +24,7 @@ const ListOfClients = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
-
+  const location = useLocation();
   const [accountList, setAccountList] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -71,6 +71,7 @@ const ListOfClients = () => {
         setAccountList(result.data);
         setCurrentPage(page);
         setTotalPages(result.totalPages || 1);
+        
         setTotalRecords(result.totalRecords || 0);
       } else {
         setAccountList([]);
@@ -200,7 +201,7 @@ const ListOfClients = () => {
       {(showDepositModal || showWithdrawModal || showExposureModal || showcraditModal || showPasswordModal || showChangeStatusModal) && (<div id="__BVID__241___BV_modal_backdrop_" className="modal-backdrop"></div>)}
       {
         addAccount ? (
-          <AddAccount />
+          <AddAccount redirectionUrl={location.pathname} onBack={() => setAddAccount(false)} />
         ) : (
           <div className='listing-grid'>
             <div className='row'>

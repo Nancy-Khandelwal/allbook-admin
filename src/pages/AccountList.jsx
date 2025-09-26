@@ -14,6 +14,7 @@ import autoTable from 'jspdf-autotable';
 import Loading from '../components/Loading';
 import { saveAs } from "file-saver";
 import ExportButtons from '../components/Export';
+import { useLocation } from "react-router-dom";
 
 const AccountList = () => {
     const [accountList, setAccountList] = useState([]);
@@ -275,12 +276,12 @@ const AccountList = () => {
             setCurrentPage(page);
         }
     };
-
-
+  const location = useLocation();
+ console.log("Current URL:", location.pathname);
     return (
         <div className='w-full'>
             {addAccount ? (
-                <AddAccount onBack={() => setAddAccount(false)} />
+                <AddAccount onBack={() => setAddAccount(false)}  redirectionUrl={location.pathname}/>
             ) : (
                 <div data-v-61537a09 className='listing-grid !bg-[#f9f9f9]'>
                     <div className="master-balance">
