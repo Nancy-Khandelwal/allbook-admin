@@ -50,9 +50,7 @@ const schema = yup.object().shape({
     then: () => yup.number().required("Bet Delay is required"),
     otherwise: () => yup.number().nullable(),
   }),
-  spart1: yup
-    .string()
-    .required("Downline in Partnership is required"),
+  
 });
 
 // const AddAccount = () => {
