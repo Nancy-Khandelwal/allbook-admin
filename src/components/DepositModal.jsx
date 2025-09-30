@@ -180,6 +180,7 @@ const DepositModal = ({ onClose, selectedUser, updateAccountListDeposit }) => {
         Number(localSelectedUser?.exposure || 0) +
         Number(localSelectedUser?.downLineDeposit || 0);
 
+        
     const totalAfterDeposit = amount ? adminBase - Number(amount) : adminBase;
     const Afterdeposit = amount ? userBase + Number(amount) : userBase;
 
