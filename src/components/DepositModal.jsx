@@ -172,8 +172,7 @@ const DepositModal = ({ onClose, selectedUser, updateAccountListDeposit }) => {
         Number(localAdminData?.deposit || 0) +
         Number(localAdminData?.profitlossbalance || 0) +
         Number(localAdminData?.exposure || 0) -
-        Number(localAdminData?.downLineDeposit || 0);
-        
+        Number(localAdminData?.downLineDeposit || 0);  
 
     const userBase =
         Number(localSelectedUser?.deposit || 0) +
