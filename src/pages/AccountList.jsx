@@ -21,9 +21,11 @@ const AccountList = () => {
     const [addAccount, setAddAccount] = useState(false);
     const [userBalance, setUserBalance] = useState(false);
     const [activeTab, setActiveTab] = useState("active-user");
-    const [entriesPerPage, setEntriesPerPage] = useState(25);
+    const [entriesPerPage, setEntriesPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalRecords, setTotalRecords] = useState(0);
+      const [totalPages, setTotalPages] = useState(1);
+    const [search, setSearch] = useState("");
     const [expandedMaster, setExpandedMaster] = useState(null);
     const [childList, setChildList] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -48,66 +50,84 @@ const AccountList = () => {
 
     const capitalizeFirst = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 
-    const fetchActiveUsers = async (page = 1, limit = entriesPerPage, search = "") => {
-        setLoading(true);
-        try {
-            const token = cookies.get("auth-token");
-            const result = await apiCall(
-                "GET",
-                `user/active_child_list?search=${search}&page=${page}&limit=${limit}`,
-                null,
-                {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                }
-            );
+//     const fetchActiveUsers = async (page = 1,  search = "") => {
+//         setLoading(true);
+//         try {
+//             const token = cookies.get("auth-token");
+//              const queryParams = new URLSearchParams({
+//         page,
+//         limit: entriesPerPage,
 
-            if (result && result.success) {
-                setAccountList(result.data || []);
-                setTotalRecords(result.totalCount || 0);
-                setCurrentPage(page);
-            } else {
-                setAccountList([]);
-                setTotalRecords(0);
-            }
-        } catch (err) {
-            console.error("Error fetching active users:", err);
-            setAccountList([]);
-        } finally {
-            setLoading(false);
-        }
-    };
+//       });
+//       if (search) queryParams.append("search", search);
 
-    const fetchInactiveUsers = async (page = 1, limit = entriesPerPage, search = "") => {
-        setLoading(true);
-        try {
-            const token = cookies.get("auth-token");
-            const result = await apiCall(
-                "GET",
-                `user/inactive_child_list?search=${search}&page=${page}&limit=${limit}`,
-                null,
-                {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                }
-            );
+     
+//             const result = await apiCall(
+//                 "GET",
+//                 `user/active_child_list?${queryParams.toString()}`,
+//                 null,
+//                 {
+//                     Authorization: `Bearer ${token}`,
+//                     "Content-Type": "application/json",
+//                 }
+//             );
 
-            if (result && result.success) {
-                setAccountList(result.data || []);
-                setTotalRecords(result.totalCount || 0);
-                setCurrentPage(page);
-            } else {
-                setAccountList([]);
-                setTotalRecords(0);
-            }
-        } catch (err) {
-            console.error("Error fetching inactive users:", err);
-            setAccountList([]);
-        } finally {
-            setLoading(false);
-        }
-    };
+//             if (result && result.success) {
+//                 setAccountList(result.data || []);
+//                  setCurrentPage(page);
+//                setTotalPages(result.totalPages || 1);
+//                setTotalRecords(result.totalRecords || 0);
+//             } else {
+//                   setTotalPages(1);
+//         setTotalRecords(0);
+//             }
+//         } catch (err) {
+//               setAccountList([]);
+//       setTotalPages(1);
+//       setTotalRecords(0);
+//         } finally {
+//             setLoading(false);
+//         }
+//     };
 
+//     const fetchInactiveUsers = async (page = 1, limit = entriesPerPage, search = "") => {
+//         setLoading(true);
+//         try {
+//             const token = cookies.get("auth-token");
+//             const result = await apiCall(
+//                 "GET",
+//                 `user/inactive_child_list?search=${search}&page=${page}&limit=${limit}`,
+//                 null,
+//                 {
+//                     Authorization: `Bearer ${token}`,
+//                     "Content-Type": "application/json",
+//                 }
+//             );
+
+//             if (result && result.success) {
+//                 setAccountList(result.data || []);
+//                 setTotalRecords(result.totalCount || 0);
+//                 setCurrentPage(page);
+//             } else {
+//                 setAccountList([]);
+//                 setTotalRecords(0);
+//             }
+//         } catch (err) {
+//             console.error("Error fetching inactive users:", err);
+//             setAccountList([]);
+//         } finally {
+//             setLoading(false);
+//         }
+//     };
+
+//   useEffect(() => {
+//     fetchActiveUsers(1, search);
+//   }, [entriesPerPage]);
+//     const goToPage = (page) => {
+//     if (page >= 1 && page <= totalPages) {
+//       fetchActiveUsers(page, search);
+//     }
+//   };
     const exportData = async (type) => {
         try {
             const token = cookies.get("auth-token");
@@ -215,73 +235,154 @@ const AccountList = () => {
         }
     };
 
+// useEffect(() => {
+//     if (activeTab === "active-user") {
+//         fetchActiveUsers(currentPage, entriesPerPage, searchTerm);
+//     } else if (activeTab === "deactive-user") {
+//         fetchInactiveUsers(currentPage, entriesPerPage, searchTerm);
+//     }
+// }, [activeTab, entriesPerPage, currentPage, searchTerm]);
 
 
-    useEffect(() => {
-        if (activeTab === "active-user") {
-            fetchActiveUsers(currentPage, entriesPerPage);
-        } else if (activeTab === "deactive-user") {
-            fetchInactiveUsers(currentPage, entriesPerPage);
-        }
-    }, [activeTab, entriesPerPage, currentPage, parentId]);
 
 
-    const handleSearch = () => {
+    // useEffect(() => {
+    //     if (activeTab === "active-user") {
+    //         fetchActiveUsers(currentPage, entriesPerPage);
+    //     } else if (activeTab === "deactive-user") {
+    //         fetchInactiveUsers(currentPage, entriesPerPage);
+    //     }
+    // }, [activeTab, entriesPerPage, currentPage, parentId]);
+
+  const fetchUsers = async (tab = activeTab, page = 1, limit = entriesPerPage, search = "") => {
+    setLoading(true);
+    try {
+      const token = cookies.get("auth-token");
+      const queryParams = new URLSearchParams({
+        page,
+        limit,
+      });
+      if (search) queryParams.append("search", search);
+
+      const endpoint =
+        tab === "active-user"
+          ? `user/active_child_list?${queryParams.toString()}`
+          : `user/inactive_child_list?${queryParams.toString()}`;
+
+      const result = await apiCall("GET", endpoint, null, {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      });
+
+      if (result && result.success) {
+        setAccountList(result.data || []);
+        setCurrentPage(page);
+        setTotalPages(result.totalPages || 1);
+        setTotalRecords(result.totalRecords || 0);
+      } else {
+        setAccountList([]);
         setCurrentPage(1);
-        if (activeTab === "active-user") {
-            fetchActiveUsers(1, entriesPerPage, searchTerm);
-        } else {
-            fetchInactiveUsers(1, entriesPerPage, searchTerm);
-        }
-    };
-
-    const handleReset = () => {
-        setSearchTerm("");
-        setCurrentPage(1);
-        if (activeTab === "active-user") {
-            fetchActiveUsers(1, entriesPerPage, "");
-        } else {
-            fetchInactiveUsers(1, entriesPerPage, "");
-        }
-    };
-
-    const handleClose = () => {
-        setShowDepositModal(false);
-        setShowWithdrawModal(false);
-        setShowExposureModal(false);
-        setShowCraditModal(false);
-        setShowPasswordModal(false);
-        setShowChangeStatusModal(false);
+        setTotalPages(1);
+        setTotalRecords(0);
+      }
+    } catch (err) {
+      console.error(err);
+      setAccountList([]);
+      setCurrentPage(1);
+      setTotalPages(1);
+      setTotalRecords(0);
+    } finally {
+      setLoading(false);
     }
-    const updateAccountList = (userId, newLimit) => {
-        setAccountList(prev =>
-            prev.map(user =>
-                user._id === userId ? { ...user, exposerLimit: newLimit } : user
-            )
-        );
-    };
+  };
+
+  // Fetch whenever tab, page, entriesPerPage, or searchTerm changes
+  useEffect(() => {
+    fetchUsers(activeTab, currentPage, entriesPerPage, searchTerm);
+  }, [activeTab, currentPage, entriesPerPage, searchTerm]);
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleSearch = () => {
+    setCurrentPage(1);
+  };
+
+  const handleReset = () => {
+    setSearchTerm("");
+    setCurrentPage(1);
+  };
+
+  const handleClose = () => {
+    setShowDepositModal(false);
+    setShowWithdrawModal(false);
+    setShowExposureModal(false);
+    setShowCraditModal(false);
+    setShowPasswordModal(false);
+    setShowChangeStatusModal(false);
+  };
+
+  const updateAccountList = (userId, newLimit) => {
+    setAccountList((prev) =>
+      prev.map((user) => (user._id === userId ? { ...user, exposerLimit: newLimit } : user))
+    );
+  };
+
+    // const handleSearch = () => {
+    //     setCurrentPage(1);
+    //     if (activeTab === "active-user") {
+    //         fetchActiveUsers(1, entriesPerPage, searchTerm);
+    //     } else {
+    //         fetchInactiveUsers(1, entriesPerPage, searchTerm);
+    //     }
+    // };
+
+    // const handleReset = () => {
+    //     setSearchTerm("");
+    //     setCurrentPage(1);
+    //     if (activeTab === "active-user") {
+    //         fetchActiveUsers(1, entriesPerPage, "");
+    //     } else {
+    //         fetchInactiveUsers(1, entriesPerPage, "");
+    //     }
+    // };
+
+    // const handleClose = () => {
+    //     setShowDepositModal(false);
+    //     setShowWithdrawModal(false);
+    //     setShowExposureModal(false);
+    //     setShowCraditModal(false);
+    //     setShowPasswordModal(false);
+    //     setShowChangeStatusModal(false);
+    // }
+    // const updateAccountList = (userId, newLimit) => {
+    //     setAccountList(prev =>
+    //         prev.map(user =>
+    //             user._id === userId ? { ...user, exposerLimit: newLimit } : user
+    //         )
+    //     );
+    // };
 
     // const totalPages = Math.ceil(accountList.length / entriesPerPage);
 
-    const totalPages = Math.ceil(totalRecords / entriesPerPage);
+    // const totalPages = Math.ceil(totalRecords / entriesPerPage);
 
-    const paginatedData = accountList.slice(
-        (currentPage - 1) * entriesPerPage,
-        currentPage * entriesPerPage
-    );
+    // const paginatedData = accountList.slice(
+    //     (currentPage - 1) * entriesPerPage,
+    //     currentPage * entriesPerPage
+    // );
 
 
-    const goToPage = (page) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
-        }
-    };
-  const location = useLocation();
- console.log("Current URL:", location.pathname);
+    const location = useLocation();
+    console.log("Current URL:", location.pathname);
+
     return (
         <div className='w-full'>
             {addAccount ? (
-                <AddAccount onBack={() => setAddAccount(false)}  redirectionUrl={location.pathname}/>
+                <AddAccount onBack={() => setAddAccount(false)} redirectionUrl={location.pathname} />
             ) : (
                 <div data-v-61537a09 className='listing-grid !bg-[#f9f9f9]'>
                     <div className="master-balance">
@@ -320,10 +421,19 @@ const AccountList = () => {
                                         <select className="custom-select custom-select-sm" id="__BVID__249"
                                             value={entriesPerPage}
                                             onChange={(e) => {
-                                                setEntriesPerPage(Number(e.target.value));
-                                                setCurrentPage(1); // reset to first page
+                                                const newSize = Number(e.target.value);
+                                                setEntriesPerPage(newSize);
+                                                setCurrentPage(1); // reset page to 1
+
+                                                // fetch new data dynamically
+                                                if (activeTab === "active-user") {
+                                                    fetchActiveUsers(1, newSize, searchTerm);
+                                                } else {
+                                                    fetchInactiveUsers(1, newSize, searchTerm);
+                                                }
                                             }}
-                                        >{[25, 50, 100, 250, 500, 750, 1000].map((size) => (
+
+                                        >{[10, 25, 50, 100, 250, 500, 750, 1000].map((size) => (
                                             <option key={size} value={size}>
                                                 {size}
                                             </option>
@@ -346,13 +456,13 @@ const AccountList = () => {
                                 <Icon icon="prime:file-pdf" width="24" height="24" style={{ color: '#fff', display: 'inline' }} />PDF
                             </button> */}
                             <ExportButtons exportData={exportData} />
-                             <div id="export_1756880630281" className="d-inline-block">
+                            <div id="export_1756880630281" className="d-inline-block">
                                 {/* <button type="button" className="btn buttons-excel btn-success !bg-[#217346] hover:!bg-[#2ca579]" onClick={() => exportData("csv")}>
                                     <Icon icon="prime:file-excel" width="24" height="24" style={{ color: '#fff', display: 'inline' }} />Excel
                                 </button> */}
-                             
-                                </div>
-                                </div> <div className="table no-footer list-clients table-responsive-sm">
+
+                            </div>
+                        </div> <div className="table no-footer list-clients table-responsive-sm">
                             <table id="eventsListTbl" role="table" aria-busy="false" aria-colcount="12" className="table b-table table-striped table-bordered"><thead role="rowgroup" className=""><tr role="row" className=""><th role="columnheader" scope="col" tabIndex="0" aria-colindex="1" aria-sort="none" className="position-relative"><div>User Name</div><span className="sr-only"> (Click to sort ascending)</span></th><th role="columnheader" scope="col" tabIndex="0" aria-colindex="2" aria-sort="none" className="position-relative text-right"><div>Credit Referance</div><span className="sr-only"> (Click to sort ascending)</span></th><th role="columnheader" scope="col" tabIndex="0" aria-colindex="3" aria-sort="none" className="position-relative text-right"><div>Balance</div><span className="sr-only"> (Click to sort ascending)</span></th><th role="columnheader" scope="col" tabIndex="0" aria-colindex="4" aria-sort="none" className="position-relative text-right"><div>Client(P/L)</div><span className="sr-only"> (Click to sort ascending)</span></th><th role="columnheader" scope="col" aria-colindex="5" className="text-right"><div>Exposure</div></th><th role="columnheader" scope="col" aria-colindex="6" className="text-right"><div>Available Balance</div></th><th role="columnheader" scope="col" aria-colindex="7" className=""><div>U st</div></th><th role="columnheader" scope="col" aria-colindex="8" className=""><div>B st</div></th><th role="columnheader" scope="col" aria-colindex="9" className=""><div>Exposure Limit</div></th><th role="columnheader" scope="col" aria-colindex="10" className=""><div>Default(%)</div></th><th role="columnheader" scope="col" tabIndex="0" aria-colindex="11" aria-sort="none" className="position-relative"><div>Account Type</div><span className="sr-only"> (Click to sort ascending)</span></th><th role="columnheader" scope="col" aria-colindex="12" className=""><div>Action</div></th></tr></thead>
                                 <tbody role="rowgroup">
 
@@ -413,29 +523,128 @@ const AccountList = () => {
                                                     </span>
                                                 )}
                                             </td><td aria-colindex="2" role="cell" className=""><p className="text-right mb-0 cp">{item.credit || 0}</p></td><td aria-colindex="3" role="cell" className=""><p className="text-right mb-0">{item.deposit}</p></td><td aria-colindex="4" role="cell" className=""><p className="text-right mb-0">{item.profitLossBalance
-                                            }</p></td><td aria-colindex="5" role="cell" className="text-right"><p className="mb-0 text-right">{item.exposure}</p></td><td aria-colindex="6" role="cell" className=""><p className="text-right mb-0"> {Number(item.deposit || 0) + Number(item.profitlossbalance || 0) + Number(item.exposure || 0)}</p></td><td aria-colindex="7" role="cell" className=""><div className="mb-1 custom-control custom-checkbox"><input type="checkbox" disabled="disabled" className="custom-control-input" value="true" id="__BVID__1165" checked={item.isActive} /><label className="custom-control-label" htmlFor="__BVID__1165"></label></div></td><td aria-colindex="8" role="cell" className=""><div className="mb-1 custom-control custom-checkbox"><input type="checkbox" disabled="disabled" className="custom-control-input" value="true" id="__BVID__1166" checked={item.isBetAllowed} /><label className="custom-control-label" htmlFor="__BVID__1166"></label></div></td><td aria-colindex="9" role="cell" className="">{item.exposerLimit}</td><td aria-colindex="10" role="cell" className=""><p className="text-left mb-0">
-                                                {item.defaultPersentage || 0}
-                                            </p></td><td aria-colindex="11" role="cell" className="">{capitalizeFirst(item.role)}</td><td aria-colindex="12" role="cell" className=""><div role="group" className="btn-group"><button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => {
-                                                setSelectedUser(item);
-                                                setShowDepositModal(true);
-                                            }}>D</button>
-                                                <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserW(item); setShowWithdrawModal(true) }}>W</button>
-                                                <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserl(item); setShowExposureModal(true) }}>L</button> <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserc(item); setShowCraditModal(true) }}>C</button> <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserp(item); setShowPasswordModal(true) }}>P</button> <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserm(item); setShowChangeStatusModal(true) }}>S</button></div></td></tr>
+                                            }</p></td><td aria-colindex="5" role="cell" className="text-right"><p className="mb-0 text-right">{item.exposure}</p></td><td aria-colindex="6" role="cell" className="">
+                                                    <p className="text-right mb-0"> {Number(item.deposit || 0) + Number(item.profitlossbalance || 0) + Number(item.exposure || 0) - Number(item.downLineDeposit || 0)}</p></td><td aria-colindex="7" role="cell" className=""><div className="mb-1 custom-control custom-checkbox"><input type="checkbox" disabled="disabled" className="custom-control-input" value="true" id="__BVID__1165" checked={item.isActive} /><label className="custom-control-label" htmlFor="__BVID__1165"></label></div></td><td aria-colindex="8" role="cell" className=""><div className="mb-1 custom-control custom-checkbox"><input type="checkbox" disabled="disabled" className="custom-control-input" value="true" id="__BVID__1166" checked={item.isBetAllowed} /><label className="custom-control-label" htmlFor="__BVID__1166"></label></div></td><td aria-colindex="9" role="cell" className="">{item.exposerLimit}</td><td aria-colindex="10" role="cell" className=""><p className="text-left mb-0">
+                                                        {item.defaultPersentage || 0}
+                                                    </p></td><td aria-colindex="11" role="cell" className="">{capitalizeFirst(item.role)}</td>
+                                                <td aria-colindex="12" role="cell" className="">
+                                                    <div role="group" className="btn-group"><button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => {
+                                                        setSelectedUser(item);
+                                                        setShowDepositModal(true);
+                                                    }}>D</button>
+                                                        <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserW(item); setShowWithdrawModal(true) }}>W</button>
+                                                        <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserl(item); setShowExposureModal(true) }}>L</button> <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserc(item); setShowCraditModal(true) }}>C</button> <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserp(item); setShowPasswordModal(true) }}>P</button> <button type="button" className="btn action-button btn-secondary hover:!bg-[#636678] !bg-[#444]" onClick={() => { setSelectedUserm(item); setShowChangeStatusModal(true) }}>S</button></div></td></tr>
                                             // ))}
 
                                         ))
                                     )}
 
                                 </tbody></table></div></div>
-                    <div className="row pt-3"><div className="col"><div className="dataTables_paginate paging_simple_numbers float-right"><ul className="pagination pagination-rounded mb-0"><ul role="menubar" aria-disabled="false" aria-label="Pagination" className="pagination dataTables_paginate paging_simple_numbers my-0 b-pagination justify-content-end"><li role="presentation" aria-hidden="true" className="page-item disabled"><span role="menuitem" aria-label="Go to first page" aria-disabled="true" className={`page-link ${currentPage === 1 ? "disabled" : ""}`}>«</span></li><li role="presentation" aria-hidden="true" className="page-item disabled"><span role="menuitem" aria-label="Go to previous page" aria-disabled="true" className={`page-link ${currentPage === 1 ? "disabled" : ""}`} onClick={() => goToPage(currentPage - 1)}>‹</span></li>
+                    {/* <div className="row pt-3"><div className="col"><div className="dataTables_paginate paging_simple_numbers float-right"><ul className="pagination pagination-rounded mb-0"><ul role="menubar" aria-disabled="false" aria-label="Pagination" className="pagination dataTables_paginate paging_simple_numbers my-0 b-pagination justify-content-end"><li role="presentation" aria-hidden="true" className="page-item disabled"><span role="menuitem" aria-label="Go to first page" aria-disabled="true" className={`page-link ${currentPage === 1 ? "disabled" : ""}`}>«</span></li><li role="presentation" aria-hidden="true" className="page-item disabled"><span role="menuitem" aria-label="Go to previous page" aria-disabled="true" className={`page-link ${currentPage === 1 ? "disabled" : ""}`} onClick={() => goToPage(currentPage - 1)}>‹</span></li>
                         {Array.from({ length: totalPages }, (_, i) => (
                             <li key={i} role="presentation" className={`page-item ${currentPage === i + 1 ? "active" : ""
                                 }`}><button role="menuitemradio" type="button" aria-label="Go to page 1" aria-checked="true" aria-posinset="1" aria-setsize="1" tabIndex="0" className="page-link btn-primary" onClick={() => goToPage(i + 1)}>{i + 1}</button></li>
                         ))}
-                        <li role="presentation" aria-hidden="true" className="page-item disabled"><span role="menuitem" aria-label="Go to next page" aria-disabled="true" className="page-link">›</span></li><li role="presentation" aria-hidden="true" className="page-item disabled"><span role="menuitem" aria-label="Go to last page" aria-disabled="true" className="page-link">»</span></li></ul></ul></div></div></div>
+                        <li role="presentation" aria-hidden="true" className="page-item disabled"><span role="menuitem" aria-label="Go to next page" aria-disabled="true" className="page-link">›</span></li><li role="presentation" aria-hidden="true" className="page-item disabled"><span role="menuitem" aria-label="Go to last page" aria-disabled="true" className="page-link">»</span></li></ul></ul></div></div></div> */}
+      <div className="row pt-3">
+                      <div className="col">
+                        <div className="dataTables_paginate paging_simple_numbers float-right">
+                          <ul className="pagination pagination-rounded mb-0">
+                            <li
+                              className={`page-item ${currentPage === 1 ? "disabled" : ""
+                                }`}
+                            >
+                              <button
+                                className="page-link"
+                                onClick={() => goToPage(1)}
+                              >
+                                «
+                              </button>
+                            </li>
+                            <li
+                              className={`page-item ${currentPage === 1 ? "disabled" : ""
+                                }`}
+                            >
+                              <button
+                                className="page-link"
+                                onClick={() => goToPage(currentPage - 1)}
+                              >
+                                ‹
+                              </button>
+                            </li>
 
-                    {showDepositModal && <DepositModal onClose={handleClose} selectedUser={selectedUser} />}
-                    {showWithdrawModal && <WithdrawModal onClose={handleClose} selectedUserW={selectedUserW} />}
+                            {/* {Array.from({ length: totalPages }, (_, i) => (
+                              <li
+                                key={i}
+                                className={`page-item ${currentPage === i + 1 ? "active" : ""
+                                  }`}
+                              >
+                                <button role="menuitemradio" type="button" aria-label="Go to page 1" aria-checked="true" aria-posinset="1" aria-setsize="1" tabindex="0" class="page-link btn-primary"
+                                  // className="page-link"
+                                  onClick={() => goToPage(i + 1)}
+                                >
+                                  {i + 1}
+                                </button>
+                              </li>
+                            ))} */}
+<li className="page-item active">
+  <span
+    className="page-link"
+    style={{ backgroundColor: "#2e4a3b", borderColor: "#2e4a3b", color: "#fff" }}
+  >
+    {currentPage}
+  </span>
+</li>
+
+
+                            <li
+                              className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                                }`}
+                            >
+                              <button
+                                className="page-link"
+                                onClick={() => goToPage(currentPage + 1)}
+                              >
+                                ›
+                              </button>
+                            </li>
+                            <li
+                              className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                                }`}
+                            >
+                              <button
+                                className="page-link"
+                                onClick={() => goToPage(totalPages)}
+                              >
+                                »
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+
+                      </div>
+                    </div>
+
+
+                    {showDepositModal && <DepositModal onClose={handleClose} selectedUser={{ ...selectedUser }} updateAccountListDeposit={(userId, newDeposit, newBalance) => {
+                        setAccountList((prev) =>
+                            prev.map((user) =>
+                                user._id === userId
+                                    ? { ...user, deposit: newDeposit, balance: newBalance }
+                                    : user
+                            )
+                        );
+                    }} />}
+                    {showWithdrawModal && <WithdrawModal onClose={handleClose}  selectedUserW={accountList.find(u => u._id === selectedUserW._id)}
+  updateAccountListWithdraw={(userId, newWithdraw, newBalance) => {
+    setAccountList(prev =>
+      prev.map(user =>
+        user._id === userId
+          ? { ...user, withdraw: newWithdraw, balance: newBalance }
+          : user
+      )
+    );
+  }} />}
                     {showExposureModal && <ExposureLimitModal onClose={handleClose} selectedUserl={selectedUserl} setSelectedUserl={setSelectedUserl} updateAccountList={updateAccountList} />}
                     {showcraditModal && <CarditModal onClose={handleClose} selectedUserc={selectedUserc}
                         updateAccountListCredit={(userId, newCredit) => {

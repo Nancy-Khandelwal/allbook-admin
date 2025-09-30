@@ -76,6 +76,8 @@ import useSocket from "../hooks/useSocket";
 const UserDetails = createContext();
 export const useUser = () => useContext(UserDetails);
 
+
+
 // export const UserContextProvider = ({ children }) => {
 //   const cookies = new Cookies();
 //   const [token, setToken] = useState(cookies.get("auth-token") || null);
@@ -117,55 +119,105 @@ export const UserContextProvider = ({ children }) => {
   const cookies = new Cookies();
   const [token, setToken] = useState(cookies.get("auth-token") || null);
   const [userData, setUserData] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+  
  const socket = useSocket("https://api.tapswap-clone.com");
   const { apiCall } = useApi();
 
   // Set auth token in cookie and state
+  // const setAuthToken = async (newToken) => {
+  //   setToken(newToken);
+
+  //   if (newToken) {
+  //     cookies.set("auth-token", newToken, { path: "/", maxAge: 3600 });
+
+  //     // Call verifyUser only after login
+  //     try {
+  //       const response = await apiCall("GET", "user/get_user_info", null, newToken);
+  //       if (response.success) {
+  //         setUserData(response.data);
+  //       } else {
+  //         // Token invalid → clear it
+  //         setAuthToken(null);
+  //       }
+  //     } catch (err) {
+  //       console.error("Failed to verify user", err);
+  //       setAuthToken(null);
+  //     }
+  //   } else {
+  //     cookies.remove("auth-token");
+  //     setUserData(null);
+  //   }
+  // };
+
+  // // Manual verify function if needed (e.g., in ProtectedRoute)
+  // const verifyUser = async () => {
+  //   if (!token) return { success: false };
+  //   try {
+  //     const response = await apiCall("GET", "user/get_user_info", null, token);
+  //     if (response.success) {
+  //       setUserData(response.data);
+  //       return { success: true, data: response.data };
+  //     } else {
+  //       setAuthToken(null);
+  //       return { success: false };
+  //     }
+  //   } catch (err) {
+  //     setAuthToken(null);
+  //     return { success: false };
+  //   }
+  // };
   const setAuthToken = async (newToken) => {
-    setToken(newToken);
+  setToken(newToken);
+  setLoadingUser(true);
 
-    if (newToken) {
-      cookies.set("auth-token", newToken, { path: "/", maxAge: 3600 });
+  if (newToken) {
+    cookies.set("auth-token", newToken, { path: "/", maxAge: 3600 });
 
-      // Call verifyUser only after login
-      try {
-        const response = await apiCall("GET", "user/get_user_info", null, newToken);
-        if (response.success) {
-          setUserData(response.data);
-        } else {
-          // Token invalid → clear it
-          setAuthToken(null);
-        }
-      } catch (err) {
-        console.error("Failed to verify user", err);
-        setAuthToken(null);
-      }
-    } else {
-      cookies.remove("auth-token");
-      setUserData(null);
-    }
-  };
-
-  // Manual verify function if needed (e.g., in ProtectedRoute)
-  const verifyUser = async () => {
-    if (!token) return { success: false };
     try {
-      const response = await apiCall("GET", "user/get_user_info", null, token);
+      const response = await apiCall("GET", "user/get_user_info", null, newToken);
       if (response.success) {
         setUserData(response.data);
-        return { success: true, data: response.data };
       } else {
         setAuthToken(null);
-        return { success: false };
       }
     } catch (err) {
+      console.error("Failed to verify user", err);
+      setAuthToken(null);
+    } finally {
+      setLoadingUser(false);
+    }
+  } else {
+    cookies.remove("auth-token");
+    setUserData(null);
+    setLoadingUser(false);
+  }
+};
+
+const verifyUser = async () => {
+  if (!token) return { success: false };
+
+  setLoadingUser(true);
+  try {
+    const response = await apiCall("GET", "user/get_user_info", null, token);
+    if (response.success) {
+      setUserData(response.data);
+      return { success: true, data: response.data };
+    } else {
       setAuthToken(null);
       return { success: false };
     }
-  };
+  } catch (err) {
+    setAuthToken(null);
+    return { success: false };
+  } finally {
+    setLoadingUser(false);
+  }
+};
+
 
   return (
-    <UserDetails.Provider value={{ token, setAuthToken, userData, setUserData, verifyUser ,socket}}>
+    <UserDetails.Provider value={{ token, setAuthToken, userData, setUserData, verifyUser ,socket, loadingUser}}>
       {children}
     </UserDetails.Provider>
   );

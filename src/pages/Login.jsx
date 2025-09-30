@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import useApi from "../components/hooks/useApi"
 import b9 from '@images/b9.png';
+
 const Login = () => {
     const navigate = useNavigate();
     const { apiCall } = useApi();
@@ -56,10 +57,10 @@ const handleSubmit = async (e) => {
         <>
         {
             successfullyChangePassword ? (
-                <div className="cp-success-box"><div className="text-center container"><h1><span className="text-success">Success! Your password has been updated successfully.</span></h1> <h1>Your transaction password is  
+                <div className="cp-success-box"><div className="text-center container"><h1><span className="text-success">Success! Your password has been updated successfully.</span></h1> <h1>Your transaction password is    
                     {/* <span className="text-info token-box">469272</span>.  */}
                      <span className="text-info token-box">{txnPassword}</span>.
-                    </h1> <h2>Please remember this transaction password, from now on all transcation of the website can be done only with this password and keep one thing in mind, do not share this password with anyone.</h2> <h2 className="mt-3 text-dark">Thank you, Team allbook.com</h2> <div className="font-hindi"><h1 className="mt-5"><span className="text-success">Success! आपका पासवर्ड बदला जा चुका है।</span></h1> <h1>आपका लेनदेन पासवर्ड <span className="text-info token-box">{txnPassword}</span> है।</h1> <h2>कृपया इस लेन-देन के पासवर्ड को याद रखें, अब से वेबसाइट के सभी हस्तांतरण केवल इस पासवर्ड से किए जा सकते हैं और एक बात का ध्यान रखें, इस पासवर्ड को किसी के साथ साझा न करें।</h2> <h2 className="mt-3 text-dark">धन्यवाद, टीम allbook.com</h2></div> <a href="/" className="btn btn-dark btn-lg mt-5 router-link-active min-w-[200px]" ><i className="fas fa-arrow-left mr-3"></i>Back</a></div></div>
+                    </h1> <h2>Please remember this transaction password, from now on all transcation of the website can be done only with this password and keep one thing in mind, do not share this password with anyone.</h2> <h2 className="mt-3 text-dark">Thank you, Team allbook.com</h2> <div className="font-hindi"><h1 className="mt-5"><span className="text-success">Success! आपका पासवर्ड बदला जा चुका है।</span></h1> <h1>आपका लेनदेन पासवर्ड  <span className="text-info token-box">{txnPassword}</span> है।</h1> <h2>कृपया इस लेन-देन के पासवर्ड को याद रखें, अब से वेबसाइट के सभी हस्तांतरण केवल इस पासवर्ड से किए जा सकते हैं और एक बात का ध्यान रखें, इस पासवर्ड को किसी के साथ साझा न करें।</h2> <h2 className="mt-3 text-dark">धन्यवाद, टीम allbook.com</h2></div> <a href="/" className="btn btn-dark btn-lg mt-5 router-link-active min-w-[200px]" ><i className="fas fa-arrow-left mr-3"></i>Back</a></div></div>
             ) :
             (
                 <div className='app h-screen !flex !flex-col !items-center w-full bg-[linear-gradient(#2E4A3B,#303733)]'>

@@ -31,7 +31,7 @@ const ListOfClients = () => {
   const [totalRecords, setTotalRecords] = useState(0);
 
   const { apiCall } = useApi();
-  const [entriesPerPage, setEntriesPerPage] = useState(25);
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -202,7 +202,7 @@ const ListOfClients = () => {
       {(showDepositModal || showWithdrawModal || showExposureModal || showcraditModal || showPasswordModal || showChangeStatusModal) && (<div id="__BVID__241___BV_modal_backdrop_" className="modal-backdrop"></div>)}
       {
         addAccount ? (
-          <AddAccount redirectionUrl={location.pathname} onBack={() => setAddAccount(false)} />
+          <AddAccount redirectionUrl={location.pathname} onBack={() => setAddAccount(false)}  />
         ) : (
           <div className='listing-grid'>
             <div className='row'>
@@ -239,12 +239,14 @@ const ListOfClients = () => {
                     <div className="row"><div className="col-sm-12 col-md-6"><div id="tickets-table_length" className="dataTables_length"><label className="d-inline-flex items-center text-[14px] leading-[15px]">
                       Show&nbsp;
                       <select className="custom-select custom-select-sm" id="__BVID__249"
-                        value={entriesPerPage}
-                        onChange={(e) => {
-                          setEntriesPerPage(Number(e.target.value));
-                          setCurrentPage(1); // reset to first page
-                        }}
-                      >{[25, 50, 100, 250, 500, 750, 1000].map((size) => (
+                       value={entriesPerPage}
+          onChange={(e) => {
+            const newSize = Number(e.target.value);
+            setEntriesPerPage(newSize);
+            setCurrentPage(1); // reset to first page
+            fetchAccounts(1, search); // fetch data dynamically
+          }}
+                      >{[10,25, 50, 100, 250, 500, 750, 1000].map((size) => (
                         <option key={size} value={size}>
                           {size}
                         </option>
@@ -406,7 +408,7 @@ const ListOfClients = () => {
                               </button>
                             </li>
 
-                            {Array.from({ length: totalPages }, (_, i) => (
+                            {/* {Array.from({ length: totalPages }, (_, i) => (
                               <li
                                 key={i}
                                 className={`page-item ${currentPage === i + 1 ? "active" : ""
@@ -419,7 +421,16 @@ const ListOfClients = () => {
                                   {i + 1}
                                 </button>
                               </li>
-                            ))}
+                            ))} */}
+<li className="page-item active">
+  <span
+    className="page-link"
+    style={{ backgroundColor: "#2e4a3b", borderColor: "#2e4a3b", color: "#fff" }}
+  >
+    {currentPage}
+  </span>
+</li>
+
 
                             <li
                               className={`page-item ${currentPage === totalPages ? "disabled" : ""
@@ -456,8 +467,24 @@ const ListOfClients = () => {
         )
       }
 
-      {showDepositModal && <DepositModal onClose={handleClose} selectedUser={selectedUser} />}
-      {showWithdrawModal && <WithdrawModal onClose={handleClose} selectedUserW={selectedUserW} />}
+      {showDepositModal && <DepositModal onClose={handleClose} selectedUser={selectedUser}   updateAccountListDeposit={(userId, newDeposit, newBalance) => {
+      setAccountList((prev) =>
+        prev.map((user) =>
+          user._id === userId
+            ? { ...user, deposit: newDeposit, balance: newBalance }
+            : user
+        )
+      );
+    }}/>}
+      {showWithdrawModal && <WithdrawModal onClose={handleClose} selectedUserW={selectedUserW}    updateAccountListWithdraw={(userId, newWithdraw, newBalance) => {
+      setAccountList((prev) =>
+        prev.map((user) =>
+          user._id === userId
+            ? { ...user, withdraw: newWithdraw, balance: newBalance }
+            : user
+        )
+      );
+    }}/>}
       {showExposureModal && <ExposureLimitModal onClose={handleClose} selectedUserl={selectedUserl} setSelectedUserl={setSelectedUserl} updateAccountList={updateAccountList} />}
       {showcraditModal && <CarditModal onClose={handleClose} selectedUserc={selectedUserc}
         updateAccountListCredit={(userId, newCredit) => {

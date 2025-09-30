@@ -9,14 +9,22 @@ import { useUser } from "../components/contexts/UserContext";
 import { ACCOUNT_ROLES, getCreatableRoles } from "./constant/accountRoles"
 import signinIcon from '@images/sign-in-icon.svg'
 import { useNavigate, useLocation } from "react-router-dom";
+import { FaTimes } from "react-icons/fa";
 
 const schema = yup.object().shape({
   username: yup.string().required("Username is required"),
-  password: yup.string().required("Password is required")
+ password: yup
+    .string()
+    .required("Password is required")
     .min(8, "Password must be at least 8 characters")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-    .matches(/[0-9]/, "Password must contain at least one number"),
+    .test(
+      "password-strength",
+      "Password must contain at least one uppercase letter, one lowercase letter, and a number",
+      (value) =>
+        /[A-Z]/.test(value || "") && 
+        /[a-z]/.test(value || "") && 
+        /[0-9]/.test(value || "")
+    ),
   rePassword: yup
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
@@ -42,19 +50,22 @@ const schema = yup.object().shape({
     then: () => yup.number().required("Bet Delay is required"),
     otherwise: () => yup.number().nullable(),
   }),
+  spart1: yup
+    .string()
+    .required("Downline in Partnership is required"),
 });
 
 // const AddAccount = () => {
 //   return (
 //     <div className='add-account'>
 //         <h2 className="m-b-20">Add Account</h2>
-//         <form data-vv-scope="InserUserAccount" method="post"><div className="row"><div className="col-6"><h4 className="mb-4 col-12">Personal Detail</h4> <div className="row"><div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Client Name:</label> <input type="text" placeholder="Client Name" name="clientname" className="form-control is-invalid" aria-required="true" aria-invalid="false" /> </div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">User Password:</label> <input type="password" placeholder="User Password" name="password" className="form-control" aria-required="true" aria-invalid="false" /> </div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Retype Password:</label> <input type="password" placeholder="Retype Password" name="rpassword" className="form-control" /></div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Full Name:</label> <input type="text" placeholder="Full Name" name="fullname" className="form-control is-invalid" aria-required="true" aria-invalid="true" /> <small className="error">
+//         <form data-vv-scope="InserUserAccount" method="post"><div className="row"><div className="col-6"><h4 className="mb-4 col-12">Personal Detail</h4> <div className="row"><div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Client Name:</label> <input type="text" placeholder="Client Name" name="clientname" className="form-control is-invalid" aria-required="true" aria-invalid="false" /> </div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">User Password:</label> <input type="password" placeholder="User Password" name="password" className="form-control" aria-required="true" aria-invalid="false" /> </div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Retype Password:</label> <input type="password" placeholder="Retype Password" name="rpassword" className="form-control" /></div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Full Name:</label> <input type="text" placeholder="Full Name" name="fullname" className="form-control is-invalid" aria-required="true" aria-invalid="true" /> <span className="error">
 //                 The fullname field is required
-//               </small></div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">City:</label> <input type="text" placeholder="City" name="city" className="form-control" aria-required="false" aria-invalid="false" /> </div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Phone:</label> <input type="text" placeholder="Phone Number" name="mono" maxlength="15" className="form-control" aria-required="false" aria-invalid="false" /> </div></div></div></div> <div className="col-6"><h4 className="mb-4 col-12">Account Detail</h4> <div className="row"><div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Account Type:</label> <select name="newlvlno" label="label" data-vv-as="User Type" className="form-control is-invalid" aria-required="true" aria-invalid="true"><option value="">Select Account Type</option> <option value="5">Agent</option><option value="6">User</option></select> <small className="error">
+//               </span</div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">City:</label> <input type="text" placeholder="City" name="city" className="form-control" aria-required="false" aria-invalid="false" /> </div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Phone:</label> <input type="text" placeholder="Phone Number" name="mono" maxlength="15" className="form-control" aria-required="false" aria-invalid="false" /> </div></div></div></div> <div className="col-6"><h4 className="mb-4 col-12">Account Detail</h4> <div className="row"><div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Account Type:</label> <select name="newlvlno" label="label" data-vv-as="User Type" className="form-control is-invalid" aria-required="true" aria-invalid="true"><option value="">Select Account Type</option> <option value="5">Agent</option><option value="6">User</option></select> <span className="error">
 //                 The User Type field is required
-//               </small></div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Credit Reference:</label> <input type="text" placeholder="Credit Reference" name="camt" className="form-control is-invalid" aria-required="true" aria-invalid="true" /> <small className="error">
+//               </span</div></div> <div className="col-6"><div className="form-group"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="">Credit Reference:</label> <input type="text" placeholder="Credit Reference" name="camt" className="form-control is-invalid" aria-required="true" aria-invalid="true" /> <span className="error">
 //                   The camt field is required
-//                 </small></div></div> </div></div></div> <div className="row mt-4"><div className="col-12"><h4 className="mb-4 col-md-12">Commission Settings</h4> <table className="table table-striped table-bordered"><tbody><tr><td>Upline</td> <td>0</td></tr> <tr><td>Downline</td> <td><input type="text" name="comm" id="" placeholder="0" maxlength="4" className="" /></td></tr> <tr><td>Our</td> <td></td></tr></tbody></table></div> <div className="col-12"><h4 className="mb-4 col-md-12">Partnership</h4> <table className="table table-striped table-bordered"><tbody><tr><td>Upline</td> <td>0</td></tr> <tr><td>Downline</td> <td><div className="form-group"><input type="text" name="spart1" placeholder="0" disabled="disabled" className="" aria-required="true" aria-invalid="false" /> </div></td></tr> <tr><td>Our</td> <td></td></tr></tbody></table></div> </div> <div className="row mt-4"><div className="col-12"><div className="form-group col-3 float-right"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="m_pwd">Transaction Password:</label> <input placeholder="Transaction Password" value="" type="password" name="mpassword" className="form-control is-invalid" aria-required="true" aria-invalid="true" /></div></div></div> <div className="row m-t-20"><div className="col-md-12"><div className="float-right"><input type="hidden" name="_token" /> <button type="submit" className="btn btn-submit">Create Account</button></div></div></div></form>
+//                 </span</div></div> </div></div></div> <div className="row mt-4"><div className="col-12"><h4 className="mb-4 col-md-12">Commission Settings</h4> <table className="table table-striped table-bordered"><tbody><tr><td>Upline</td> <td>0</td></tr> <tr><td>Downline</td> <td><input type="text" name="comm" id="" placeholder="0" maxlength="4" className="" /></td></tr> <tr><td>Our</td> <td></td></tr></tbody></table></div> <div className="col-12"><h4 className="mb-4 col-md-12">Partnership</h4> <table className="table table-striped table-bordered"><tbody><tr><td>Upline</td> <td>0</td></tr> <tr><td>Downline</td> <td><div className="form-group"><input type="text" name="spart1" placeholder="0" disabled="disabled" className="" aria-required="true" aria-invalid="false" /> </div></td></tr> <tr><td>Our</td> <td></td></tr></tbody></table></div> </div> <div className="row mt-4"><div className="col-12"><div className="form-group col-3 float-right"><label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="m_pwd">Transaction Password:</label> <input placeholder="Transaction Password" value="" type="password" name="mpassword" className="form-control is-invalid" aria-required="true" aria-invalid="true" /></div></div></div> <div className="row m-t-20"><div className="col-md-12"><div className="float-right"><input type="hidden" name="_token" /> <button type="submit" className="btn btn-submit">Create Account</button></div></div></div></form>
 //     </div>
 //   );
 // };
@@ -127,7 +138,24 @@ const AddAccount = ({onBack,redirectionUrl}) => {
   console.log("Form errors:", errors);
 
   return (
-    <div className='add-account'>
+    <div className='add-account min-h-screen p-6 relative'>
+         {/* <button
+    type="button"
+     onClick={onBack} 
+     className="absolute top-4 right-4 text-red-600 hover:text-red-800 text-10xl"
+  >
+    <FaTimes />
+  </button> */}
+<button
+  type="button"
+  onClick={onBack}
+  className="absolute top-4 right-4 flex items-center justify-center text-5xl text-red-600 hover:text-red-800 border-2 border-red-600 rounded px-4 py-2"
+>
+  <span ><FaTimes/></span> 
+
+</button>
+
+
       <h2 className="m-b-20">Add Account</h2>
       <form onSubmit={handleSubmit(onSubmit)} data-vv-scope="InserUserAccount" method="post">
         <div className="row">
@@ -138,28 +166,28 @@ const AddAccount = ({onBack,redirectionUrl}) => {
                 <div className="form-group">
                   <label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]'>Client Name:</label>
                   <input type="text" {...register("username")} placeholder="Client Name" className="form-control" />
-                  {errors.username && <small className="error">{errors.username.message}</small>}
+                  {errors.username && <span className="error">{errors.username.message}</span>}
                 </div>
               </div>
               <div className="col-6">
                 <div className="form-group">
                   <label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]'>User Password:</label>
                   <input type="password" {...register("password")} placeholder="User Password" className="form-control" />
-                  {errors.password && <small className="error">{errors.password.message}</small>}
+                  {errors.password && <span className="error">{errors.password.message}</span>}
                 </div>
               </div>
               <div className="col-6">
                 <div className="form-group">
                   <label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]'>Retype Password:</label>
                   <input type="password" {...register("rePassword")} placeholder="Retype Password" className="form-control" />
-                  {errors.rePassword && <small className="error">{errors.rePassword.message}</small>}
+                  {errors.rePassword && <span className="error">{errors.rePassword.message}</span>}
                 </div>
               </div>
               <div className="col-6">
                 <div className="form-group">
                   <label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]'>Full Name:</label>
                   <input type="text" {...register("fullName")} placeholder="Full Name" className="form-control" />
-                  {errors.fullName && <small className="error">{errors.fullName.message}</small>}
+                  {errors.fullName && <span className="error">{errors.fullName.message}</span>}
                 </div>
               </div>
               <div className="col-6">
@@ -204,7 +232,7 @@ const AddAccount = ({onBack,redirectionUrl}) => {
                     ))}
 
                   </select>
-                  {errors.role && <small className="error">{errors.role.message}</small>}
+                  {errors.role && <span className="error">{errors.role.message}</span>}
                 </div>
               </div>
               <div className="col-6">
@@ -217,7 +245,7 @@ const AddAccount = ({onBack,redirectionUrl}) => {
                     className="form-control"
                     defaultValue={0}
                   />
-                  {errors.credit && <small className="error">{errors.credit.message}</small>}
+                  {errors.credit && <span className="error">{errors.credit.message} </span>}
                 </div>
               </div>
               {
@@ -230,7 +258,7 @@ const AddAccount = ({onBack,redirectionUrl}) => {
         </div>
 
         <div className="row mt-4">
-          <div className="col-12">
+          {/* <div className="col-12">
             <h4 className="mb-4 col-md-12">Commission Settings</h4>
             <table className="table table-striped table-bordered">
               <tbody>
@@ -239,23 +267,36 @@ const AddAccount = ({onBack,redirectionUrl}) => {
                 <tr><td>Our</td><td></td></tr>
               </tbody>
             </table>
-          </div>
+          </div> */}
 
-          <div className="col-12">
+          {/* <div className="col-12">
             <h4 className="mb-4 col-md-12">Partnership</h4>
             <table className="table table-striped table-bordered">
               <tbody>
                 <tr><td>Upline</td><td>0</td></tr>
-                <tr><td>Downline</td><td><div className="form-group"><input type="text"  {...register("spart1")} placeholder="0" disabled /></div></td></tr>
+                <tr><td>Downline</td><td><div className="form-group">
+                 
+                   <input 
+    type="text"  
+    {...register("spart1")} 
+    placeholder="0" 
+    className={`form-control ${errors.spart1 ? 'border-red-500' : ''}`}
+  />
+  {errors.spart1 && (
+    <span className="text-red-500 flex items-center mt-1">
+       {errors.spart1.message}
+    </span>
+  )}
+                  </div></td></tr>
                 <tr><td>Our</td><td></td></tr>
               </tbody>
             </table>
-          </div>
+          </div> */}
 
           {
             role === 'user' && (
-              <div className="col-12"><h4 className="mb-4 col-md-12">Min Max Bet</h4> <table className="table table-striped table-bordered"><tbody><tr><td rowspan="2">Min Bet</td> <td>100</td></tr> <tr><td><input type="text" placeholder="100" {...register("minBet")} value="100" />    {errors.minBet && <small className="error">{errors.minBet.message}</small>}</td></tr> <tr><td rowspan="2">Max Bet</td> <td>5000000</td></tr> <tr><td>
-                <input type="text" placeholder="5000000" value="5000000"  {...register("maxBet")} />      {errors.maxBet && <small className="error">{errors.maxBet.message}</small>}</td></tr> <tr><td rowspan="2">Delay</td> <td>5.00</td></tr> <tr><td><input type="text" placeholder="5.00" value="5.00"   {...register("betDelay")} />   {errors.betDelay && <small className="error">{errors.betDelay.message}</small>}</td></tr></tbody></table></div>
+              <div className="col-12"><h4 className="mb-4 col-md-12">Min Max Bet</h4> <table className="table table-striped table-bordered"><tbody><tr><td rowspan="2">Min Bet</td> <td>100</td></tr> <tr><td><input type="text" placeholder="100" {...register("minBet")} value="100" />    {errors.minBet && <span className="error">{errors.minBet.message}</span>}</td></tr> <tr><td rowspan="2">Max Bet</td> <td>5000000</td></tr> <tr><td>
+                <input type="text" placeholder="5000000" value="5000000"  {...register("maxBet")} />      {errors.maxBet && <span className="error">{errors.maxBet.message}</span>}</td></tr> <tr><td rowspan="2">Delay</td> <td>5.00</td></tr> <tr><td><input type="text" placeholder="5.00" value="5.00"   {...register("betDelay")} />   {errors.betDelay && <span className="error">{errors.betDelay.message}</span>}</td></tr></tbody></table></div>
             )
           }
         </div>
@@ -265,7 +306,7 @@ const AddAccount = ({onBack,redirectionUrl}) => {
             <div className="form-group col-3 float-right">
               <label className='!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]' htmlFor="m_pwd">Transaction Password:</label>
               <input type="password" {...register("txnPassword")} placeholder="Transaction Password" className="form-control" />
-              {errors.txnPassword && <small className="error">{errors.txnPassword.message}</small>}
+              {errors.txnPassword && <span className="error">{errors.txnPassword.message}</span>}
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ import ListOfClients from './pages/ListOfClients';
 import AssignAgent from './pages/AssignAgent';
 import AccountList from './pages/AccountList';
 import AccountStatement from './pages/AccountStatement';
-import CurrentBets from './pages/CurrentBets';
+import CurrentBets from './pages/Currentbets';
 import GenernalReport from './pages/GenernalReport';
 import GameReport from './pages/GameReport';
 import CasinoReport from './pages/CasinoReport';
@@ -23,7 +23,6 @@ import GameDetails from './pages/GameDetails';
 import Login from './pages/Login';
 import ActiveChildList from "./pages/ActiveChildList";
 import ActiveInactiveChildList from './pages/ActiveInactiveChildList';
-
 function App() {
 
   return (

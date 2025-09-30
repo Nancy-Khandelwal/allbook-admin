@@ -4,15 +4,85 @@ import useApi from '../components/hooks/useApi';
 import Cookies from "universal-cookie";
 import useToast from './hooks/useToast';
 import signinIcon from '@images/sign-in-icon.svg'
+import * as yup from "yup";
 
 const PasswordModal = ({ onClose, selectedUserp, updateAccountList2 }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [txnPassword, setTxnPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [reNewPassword, setReNewPassword] = useState(""); 
 
   const { apiCall } = useApi();
   const { toastSuccess, toastError } = useToast();
+const [errors, setErrors] = useState({
+  newPassword: "",
+  reNewPassword: ""
+});
+
+
+const passwordRule = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+
+const changePasswordSchema = yup.object().shape({
+  newPassword: yup
+    .string()
+    .required("New Password is required")
+    .min(8, "New Password must be at least 8 characters")
+    .matches(
+      passwordRule,
+      "New Password must contain at least: 1 uppercase letter, 1 lowercase letter, 1 number"
+    ),
+  reNewPassword: yup
+    .string()
+    .required("Confirm Password is required")
+    .min(8, "Confirm Password must be at least 8 characters")
+    .oneOf(
+      [yup.ref("newPassword"), null],
+      "Confirm Password does not match"
+    )
+   
+});
+
+const handleNewPasswordChange = async (e) => {
+  const value = e.target.value;
+  setNewPassword(value);
+
+  try {
+    await changePasswordSchema.validateAt("newPassword", { newPassword: value });
+    setErrors((prev) => ({ ...prev, newPassword: "" }));
+  } catch (err) {
+    setErrors((prev) => ({ ...prev, newPassword: err.message }));
+  }
+
+  // Re-validate confirm password if already typed
+  if (reNewPassword) {
+    try {
+      await changePasswordSchema.validateAt("reNewPassword", {
+        newPassword: value,
+        reNewPassword,
+      });
+      setErrors((prev) => ({ ...prev, reNewPassword: "" }));
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, reNewPassword: err.message }));
+    }
+  }
+};
+
+const handleReNewPasswordChange = async (e) => {
+  const value = e.target.value;
+  setReNewPassword(value);
+
+  try {
+    await changePasswordSchema.validateAt("reNewPassword", {
+      newPassword,
+      reNewPassword: value,
+    });
+    setErrors((prev) => ({ ...prev, reNewPassword: "" }));
+  } catch (err) {
+    setErrors((prev) => ({ ...prev, reNewPassword: err.message }));
+  }
+};
+
 
    const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,10 +128,72 @@ const PasswordModal = ({ onClose, selectedUserp, updateAccountList2 }) => {
   };
 
   return (
-    <div id="__BVID__243" role="dialog" aria-describedby="__BVID__243___BV_modal_body_" class="modal fade show !block" aria-modal="true"><div class="modal-dialog modal-md modal-dialog-scrollable"><span tabIndex="0"></span><div id="__BVID__243___BV_modal_content_" tabIndex="-1" class="modal-content"><header id="__BVID__243___BV_modal_header_" class="modal-header"><h4 class="modal-title">Password</h4> <button type="button" data-dismiss="modal" class="close text-white p-0 m-0" onClick={onClose}>×</button></header><div id="__BVID__243___BV_modal_body_" class="modal-body"> <form onSubmit={handleSubmit}data-vv-scope="UserChangePassword" method="post"><div class="form-group row"><label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">New Password</label> <div class="col-8 form-group-feedback form-group-feedback-right">
-      <input type="password" name="userchangepasswordpassword"  value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)} data-vv-as="Password" class="form-control" aria-required="false" aria-invalid="false" /> </div></div> <div class="form-group row"><label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">Confirm Password</label> <div class="col-8 form-group-feedback form-group-feedback-right"><input type="password" name="userchangepasswordcpassword"  value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)} data-vv-as="Confirm Password" class="form-control" aria-required="true" aria-invalid="false" /></div></div> <div class="form-group row"><label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">Transaction Password</label> <div class="col-8 form-group-feedback form-group-feedback-right"><input type="password"   value={txnPassword}
+    <div id="__BVID__243" role="dialog" aria-describedby="__BVID__243___BV_modal_body_" class="modal fade show !block" aria-modal="true"><div class="modal-dialog modal-md modal-dialog-scrollable"><span tabIndex="0"></span><div id="__BVID__243___BV_modal_content_" tabIndex="-1" class="modal-content"><header id="__BVID__243___BV_modal_header_" class="modal-header"><h4 class="modal-title">Password</h4> <button type="button" data-dismiss="modal" class="close text-white p-0 m-0" onClick={onClose}>×</button></header><div id="__BVID__243___BV_modal_body_" class="modal-body"> <form onSubmit={handleSubmit}data-vv-scope="UserChangePassword" method="post">
+      {/* <div class="form-group row">
+        <label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">New Password</label>
+         <div class="col-8 form-group-feedback form-group-feedback-right">
+      <input type="password" name="userchangepasswordpassword"  value={newPassword}   onChange={handleNewPasswordChange}
+
+                    // onChange={(e) => setNewPassword(e.target.value)} 
+                    data-vv-as="Password" class="form-control" aria-required="false" aria-invalid="false" /> </div></div>
+                 {errors.newPassword && (
+  <div className="text-danger text-sm mt-1">{errors.newPassword}</div>
+)}
+
+                    <div class="form-group row"><label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">Confirm Password</label> <div class="col-8 form-group-feedback form-group-feedback-right">
+                      <input type="password" name="userchangepasswordcpassword"  value={reNewPassword}
+                     onChange={handleReNewPasswordChange}
+
+                    // onChange={(e) => setConfirmPassword(e.target.value)}
+                     data-vv-as="Confirm Password" class="form-control" aria-required="true" aria-invalid="false" /></div></div> 
+               {errors.reNewPassword && (
+  <div className="text-danger text-sm mt-1">{errors.reNewPassword}
+  </div>
+)} */}
+<div class="form-group row">
+  <label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">
+    New Password
+  </label>
+  <div class="col-8 form-group-feedback form-group-feedback-right">
+    <input
+      type="password"
+      name="userchangepasswordpassword"
+      value={newPassword}
+      onChange={handleNewPasswordChange}
+      data-vv-as="Password"
+      class="form-control"
+      aria-required="false"
+      aria-invalid="false"
+    />
+    {errors.newPassword && (
+      <div className="text-danger text-sm mt-1">{errors.newPassword}</div>
+    )}
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">
+    Confirm Password
+  </label>
+  <div class="col-8 form-group-feedback form-group-feedback-right">
+    <input
+      type="password"
+      name="userchangepasswordcpassword"
+      value={reNewPassword}
+      onChange={handleReNewPasswordChange}
+      data-vv-as="Confirm Password"
+      class="form-control"
+      aria-required="true"
+      aria-invalid="false"
+    />
+    {errors.reNewPassword && (
+      <div className="text-danger text-sm mt-1">{errors.reNewPassword}</div>
+    )}
+  </div>
+</div>
+
+
+                      <div class="form-group row"><label class="col-form-label col-4 !text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">Transaction Password</label> <div class="col-8 form-group-feedback form-group-feedback-right"><input type="password"   value={txnPassword}
                     onChange={(e) => setTxnPassword(e.target.value)} name="userchangepasswordmpassword" data-vv-as="Transaction Code" class="form-control" aria-required="true" aria-invalid="false" /> </div></div> <div class="form-group row"><div class="col-12 text-right"><button type="button" class="btn btn-back !bg-[#7cad79] !border-[#7cad79] !text-[#fff]" onClick={onClose}><Icon icon="fa7-solid:arrow-rotate-back" width="14" height="14"  style={{color: '#fff', display: 'inline'}} onClick={onClose} />
                     Back
                   </button>
