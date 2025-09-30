@@ -1,4 +1,4 @@
-import { statusLabels,getRowClass,getRowTooltip } from "../../utilis";
+import { statusLabels, getRowClass, getRowTooltip } from "../../utilis";
 import React, { Fragment, useState } from "react";
 import { specialGames } from "../constant/accountRoles";
 import MarketNationDetail from "../MarketNationDetail";
@@ -14,8 +14,8 @@ const MatchOdds = ({
 	marketOddsData = {},
 	setBetData,
 	sportId,
-  showHeaderButtons = false,
-  socketConnected = true, 
+	showHeaderButtons = false,
+	socketConnected = true,
 }) => {
 	if (!marketOddsData || marketOddsData?.ms === 4) return null;
 	const [showDropdown, setShowDropdown] = useState(null);
@@ -40,11 +40,10 @@ const MatchOdds = ({
 			return (
 				<div
 					key={key}
-					className={`market-odd-box ${className} ${
-						key != 2 &&
+					className={`market-odd-box ${showOdds < 4 ? '!w-[58px] lg:!w-[85px]' : '!w-[30px] sm:!w-[58px] lg:!w-[85px]'}  min-h-[35px] min-sm:h-[45px] text-center flex items-center justify-center ${className} ${key != 2 &&
 						(sportId == "7" || sportId == "4339") &&
 						"!hidden md:!flex"
-					}`}
+						}`}
 					data-title="SUSPENDED"
 				>
 					<span className="market-odd">-</span>
@@ -56,13 +55,11 @@ const MatchOdds = ({
 		return (
 			<div
 				key={key}
-				className={`market-odd-box ${className} ${
-					item.changed ? "blink" : ""
-				} ${
-					key != 2 &&
+				className={`market-odd-box ${className} ${item.changed ? "blink" : ""
+					} ${key != 2 &&
 					(sportId == "7" || sportId == "4339") &&
 					"!hidden md:!flex"
-				}`}
+					}`}
 				data-title={statusLabels[item.st] || ""}
 				onClick={() =>
 					isActive && item.st == 1 && handleBetClick(runner, item, orderType)
@@ -75,7 +72,7 @@ const MatchOdds = ({
 	};
 
 	return (
-		<div className={`game-market ${marketClass}`}>
+		<div className={`game-market p-0 ${marketClass}`}>
 			{/* Title */}
 			{/* <div className="market-title">
 				<span>
@@ -90,41 +87,41 @@ const MatchOdds = ({
            </span>
 				)}
 			</div> */}
-       <div className='market-container mt-0'>
-              <div className='market-4'>
-                <div className='bet-table'>
-         <div
-        className="bet-table-header flex justify-between items-center cursor-pointer"
-        onClick={() => setShowMarketTable(!showMarketTable)}
-      >
-        {/* <span title={specialGames.includes(sportId) ? "MATCH_ODDS" : title}>
+			<div className='market-container mt-0'>
+				<div className='market-4'>
+					<div className='bet-table'>
+						<div
+							className="bet-table-header flex justify-between items-center cursor-pointer"
+							onClick={() => setShowMarketTable(!showMarketTable)}
+						>
+							{/* <span title={specialGames.includes(sportId) ? "MATCH_ODDS" : title}>
           {specialGames.includes(sportId) ? "MATCH_ODDS" : title}
         </span> */}
-          <span title={title}>
-      {title}
-    </span>
-        
-        {showHeaderButtons && (
-          <div className="flex gap-2">
-            <button className="btn btn-back !bg-[#7cad79] !border !border-[#7cad79] !text-[#fff]">
-              Bet Lock
-            </button>
-            <button className="btn btn-back !bg-[#7cad79] !border !border-[#7cad79] !text-[#fff]">
-              User Book
-            </button>
-          </div>
-        )}
-  {/* {!specialGames.includes(sportId) && (
+							<span title={title}>
+								{title}
+							</span>
+
+							{showHeaderButtons && (
+								<div className="flex gap-2">
+									<button className="btn btn-back !bg-[#7cad79] !border !border-[#7cad79] !text-[#fff]">
+										Bet Lock
+									</button>
+									<button className="btn btn-back !bg-[#7cad79] !border !border-[#7cad79] !text-[#fff]">
+										User Book
+									</button>
+								</div>
+							)}
+							{/* {!specialGames.includes(sportId) && (
           <span className="max-bet" title="Max : 1">
             1
           </span>
         )} */}
-      </div>
-</div></div>
-</div>
+						</div>
+					</div></div>
+			</div>
 
 			{/* Header */}
-			<div className="market-header">
+			{/* <div className="market-header">
 				<div className="market-nation-detail">
 					<span className="market-nation-name"> 1</span>
 				</div>
@@ -146,17 +143,33 @@ const MatchOdds = ({
 						<div className="market-odd-box no-border d-none d-md-block" />
 					</>
 				) : null}
-			</div>
+			</div> */}
+			<div class={`bet-table-row bet-table-row-top`}><div class={`${showOdds < 4 ? 'text-right nation-name !w-[calc(100%-116px)] lg:!w-[calc(100%-170px)]' : 'text-right nation-name !w-[calc(100%-148px)] sm:!w-[calc(100%-232px)] lg:!w-[calc(100%-340px)]'}`}><span class="max-bet"><span title="Max : 1">1</span></span></div>
+			{showOdds > 4 ? (
+					<>
+						<div className="market-odd-box no-border d-none d-md-block" />
+						<div className="market-odd-box no-border d-none d-md-block" />
+					</>
+				) : null}
+			 <div class="back bl-title d-none-mobile text-[12px] md:text-[14px] !w-[58px] lg:!w-[85px]">Back111</div>
+			 <div class="lay bl-title d-none-mobile text-[12px] md:text-[14px] !w-[58px] lg:!w-[85px]">Lay</div>
+
+			 {showOdds > 4 ? (
+					<>
+						<div className="market-odd-box no-border d-none d-md-block" />
+						<div className="market-odd-box no-border d-none d-md-block" />
+					</>
+				) : null}
+			 </div>
 
 			{/* Body */}
 			<div
-				className={`market-body ${
-					marketOddsData?.ms === 1
+				className={`market-body ${marketOddsData?.ms === 1
 						? ""
 						: !(sportId === "7")
-						? "suspended-table"
-						: ""
-				}`}
+							? "suspended-table"
+							: ""
+					}`}
 				data-title={statusLabels[marketOddsData?.ms] || "SUSPENDED"}
 			>
 				{runners.map((runner, index) => {
@@ -181,26 +194,26 @@ const MatchOdds = ({
 					// 		(item) => item && item.st === 1
 					// 	) && marketOddsData?.ms == 1);
 					const rowSuspended =
-  !socketConnected ||
-  ![...odds.back, ...odds.lay].some((item) => item && item.st === 1) ||
-  marketOddsData?.ms !== 1;
+						!socketConnected ||
+						![...odds.back, ...odds.lay].some((item) => item && item.st === 1) ||
+						marketOddsData?.ms !== 1;
 
 					const suspendedStatus = [...odds.back, ...odds.lay].find(
 						(item) => item && item.st === 1);
 					// const suspendedStatus = [...odds.back, ...odds.lay].find((item) => item);
 
 					// );
-console.log("row",rowSuspended)
-console.log("odds",odds.back,odds.lay)
+					console.log("row", rowSuspended)
+					console.log("odds", odds.back, odds.lay)
 					return (
 						<Fragment key={runner.runnerId}>
 							<div
-								className={getRowClass(
+								className={`flex justify-between items-center ${getRowClass(
 									rowSuspended,
 									suspendedStatus,
 									sportId,
 									specialGames
-								)}
+								)}`}
 								data-title={getRowTooltip(
 									rowSuspended,
 									suspendedStatus,
@@ -209,7 +222,7 @@ console.log("odds",odds.back,odds.lay)
 									specialGames
 								)}
 							>
-					
+
 								{/* Conditional runner detail */}
 								{sportId === "7" || sportId === "4339" ? (
 									<MarketNationDetail
@@ -227,6 +240,8 @@ console.log("odds",odds.back,odds.lay)
 									</div>
 								)}
 
+								<div className="flex justify-end items-center">
+
 								{/* Back odds */}
 								{odds.back
 									.slice()
@@ -234,11 +249,11 @@ console.log("odds",odds.back,odds.lay)
 									.map((item, idx) =>
 										renderOddBox(idx, item, backClasses[idx], runner, "Back")
 									)}
-
 								{/* Lay odds */}
 								{odds.lay.map((item, idx) =>
 									renderOddBox(idx + 2, item, layClasses[idx], runner, "Lay")
 								)}
+								</div>
 							</div>
 							{showDropdown == index && (
 								<div
@@ -246,8 +261,8 @@ console.log("odds",odds.back,odds.lay)
 									bis_skin_checked="1"
 								>
 									{runner?.metadata?.JOCKEY_NAME &&
-									runner?.metadata?.TRAINER_NAME &&
-									runner?.metadata?.AGE ? (
+										runner?.metadata?.TRAINER_NAME &&
+										runner?.metadata?.AGE ? (
 										<>
 											<span className="jockey-detail-box">
 												<b>Jockey:</b>

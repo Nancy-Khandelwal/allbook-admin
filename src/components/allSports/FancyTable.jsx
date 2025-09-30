@@ -245,8 +245,8 @@ const FancyTable = ({ fancyData = [], fancyOddsData = {}, setBetData,showHeaderB
   };
 
   return (
-    <div className ="min-w-full center-content">
-   <div className="game-market market-6">
+    <div className ="min-w-full center-content p-0">
+   <div className="game-market market-6 p-0">
   <div className="market-container mt-0">
     <div className="market-4">
       <div className="bet-table">
@@ -269,7 +269,7 @@ const FancyTable = ({ fancyData = [], fancyOddsData = {}, setBetData,showHeaderB
       {/* Table Header */}
       <div className="bet-table-row bet-table-row-top flex justify-between items-center">
         {/* <div className="nation-name font-bold">Market Name</div> */}
-        <div className="flex space-x-1">
+        {/* <div className="flex space-x-1">
           {backClasses.map((cls, i) => (
             <div key={i} className={`back ${cls} bl-title`}>
               Back
@@ -280,8 +280,10 @@ const FancyTable = ({ fancyData = [], fancyOddsData = {}, setBetData,showHeaderB
               Lay
             </div>
           ))}
-        </div>
-        <div className="fancy-min-max-box font-bold">Min / Max</div>
+        </div> */}
+        <div class="bet-table-row justify-end"><div class="text-right nation-name"></div> <div class="back bl-title d-none-mobile !w-[58px] lg:!w-[85px]">Back</div> <div class="lay bl-title d-none-mobile !w-[58px] lg:!w-[85px]">Lay</div>
+        <div className="fancy-min-max-box text-[12px] md:text-[14px] font-bold w-[58px] lg:w-[85px] flex justify-center items-center">Min / Max</div></div>
+        {/* <div className="fancy-min-max-box font-bold">Min / Max</div> */}
       </div>
 
       {/* Table Body */}
@@ -352,30 +354,30 @@ const FancyTable = ({ fancyData = [], fancyOddsData = {}, setBetData,showHeaderB
 						const back = runnerOdds.find((o) => o.ib === true);
 						const lay = runnerOdds.find((o) => o.ib === false);
 
-						const colClass = fancyData.length > 1 ? "col-md-6" : "col-12";
+						const colClass = fancyData.length > 1 ? "col-md-12 p-0" : "col-12 p-0";
 
 						return (
 							<div key={index} className={colClass}>
 								<div className="fancy-market">
-									<div className={`market-row ${back?.rt || lay?.rt ? "" : "suspended-row"}`} data-title={back?.rt || lay?.rt ? "" : statusLabels[back?.st || lay?.st] || "SUSPENDED"}>
-										<div className="market-nation-detail">
-											<span className="market-nation-name">{item.name}</span>
+									<div className={`market-row flex w-full justify-between items-center px-2 ${back?.rt || lay?.rt ? "" : "suspended-row"}`} data-title={back?.rt || lay?.rt ? "" : statusLabels[back?.st || lay?.st] || "SUSPENDED"}>
+										<div className="market-nation-detail pl-2 text-[12px] md:text-[14px]">
+											<span className="market-nation-name !font-normal !text-[12px] md:!text-[14px] text-[#3154fd]">{item.name}</span>
 											<div className="market-nation-book"></div>
 										</div>
 
-								
+								<div className="flex justify-end items-center">
 										<div
-											className={`market-odd-box back ${
+											className={`market-odd-box text-[12px] md:text-[14px] w-[58px] lg:w-[85px] min-h-[45px] text-center flex items-center justify-center back ${
 												item.changed ? "blink" : ""
 											}`}
 										>
-											<span className="market-odd">{back?.rt ?? "-"}</span>
-											<span className="market-volume">{back?.pt ?? ""}</span>
+											<span className="market-odd ">{back?.rt ?? "-"}</span>
+											<span className="market-volume ">{back?.pt ?? ""}</span>
 										</div>
 
 										
 										<div
-											className={`market-odd-box lay ${
+											className={`market-odd-box text-[12px] md:text-[14px] w-[58px] lg:w-[85px] min-h-[45px] text-center flex items-center justify-center lay ${
 												item.changed ? "blink" : ""
 											}`}
 										>
@@ -384,16 +386,17 @@ const FancyTable = ({ fancyData = [], fancyOddsData = {}, setBetData,showHeaderB
 										</div>
 
 									
-										<div className="fancy-min-max-box">
-											<div className="fancy-min-max">
-												<span className="w-100 d-block">
+										<div className="fancy-min-max-box w-[58px] lg:w-[85px] min-h-[45px] ">
+											<div className="fancy-min-max text-center flex flex-col items-center justify-center">
+												<span className="w-100 text-[12px] md:text-[14px] d-block">
 													Min: {formatNumber(item.minBet)}
 												</span>
-												<span className="w-100 d-block">
+												<span className="w-100 text-[12px] md:text-[14px] d-block">
 													Max: {formatNumber(item.maxBet)}
 												</span>
 											</div>
 										</div>
+                    </div>
 									</div>
 								</div>
 							</div>
