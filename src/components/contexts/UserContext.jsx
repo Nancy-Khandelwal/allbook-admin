@@ -214,7 +214,11 @@ const verifyUser = async () => {
     setLoadingUser(false);
   }
 };
-
+  useEffect(() => {
+    if (token && !userData) {
+      setAuthToken(token);
+    }
+  }, [token, userData]);
 
   return (
     <UserDetails.Provider value={{ token, setAuthToken, userData, setUserData, verifyUser ,socket, loadingUser}}>

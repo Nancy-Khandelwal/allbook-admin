@@ -635,7 +635,7 @@ const AccountList = () => {
                             )
                         );
                     }} />}
-                    {showWithdrawModal && <WithdrawModal onClose={handleClose}  selectedUserW={accountList.find(u => u._id === selectedUserW._id)}
+                    {showWithdrawModal && <WithdrawModal onClose={handleClose}  selectedUserW={{selectedUserW}}
   updateAccountListWithdraw={(userId, newWithdraw, newBalance) => {
     setAccountList(prev =>
       prev.map(user =>

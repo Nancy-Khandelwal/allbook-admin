@@ -108,7 +108,8 @@ const Navbar = () => {
           <div className='w-full flex bg-[#2e4a3b] h-dvh p-3 absolute left-0 top-0 !z-[99999]'>
             <ul className="nav !w-full align-items-center main-menu !flex !flex-col !items-center !gap-2 xl:!hidden !text-[#fff]">
               <img src={closeIcon} alt='close' className='min-w-[20px] h-[20px] cursor-pointer mb-4' onClick={() => setOpenMenu(false)} />
-              <li className="nav-item"><Link  className="nav-link cursor-pointer !text-[14px]" onClick={() => { navigate('/users'); setOpenMenu(false) }}>List of
+              <li className="nav-item">
+                <Link   to="/users" className="nav-link cursor-pointer !text-[14px]" onClick={() => {  setOpenMenu(false) }}>List of
                 Clients</Link ></li> <li className="nav-item"><Link to="/assign-agent" className="nav-link cursor-pointer !text-[14px] !text-[#fff]" onClick={() => { navigate('/assign-agent'); setOpenMenu(false) }}>Assign Agent</Link ></li> <li className="nav-item"><Link to="/market-analysis" aria-current="page" className="nav-link router-link-exact-active router-link-active cursor-pointer !text-[#fff] !text-[14px]" onClick={() => { navigate('/market-analysis'); setOpenMenu(false) }}>Market
                   Analysis</Link ></li>
               <li ref={dropdownRef} className={`nav-item dropdown ${openDropdown === "liveMarket" ? "show" : ""}`}
@@ -233,7 +234,7 @@ const Navbar = () => {
                   Login</a ></li>
               <div ref={dropdownRef} className="dropdown b-dropdown btn-group !relative sm:!hidden !block" id="__BVID__66" ><button aria-haspopup="menu" aria-expanded="false" className="btn dropdown-toggle btn-black header-item" id="__BVID__66__BV_toggle_" onClick={() => setUserItem(!userItem)}>
    {!loadingUser ? (
-  <span className="ml-1">{userData?.username || "Unknown"}</span>
+  <span className="ml-1">{userData?.username}</span>
 ) : (
   <span className="ml-1">Loading...</span> // or use a spinner/skeleton
 )}

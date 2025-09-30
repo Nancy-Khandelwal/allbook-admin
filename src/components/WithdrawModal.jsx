@@ -191,6 +191,7 @@ const WithdrawModal = ({ onClose, selectedUserW, updateAccountListWithdraw }) =>
             const payload = { userId: selectedUserW._id, amount, txnPassword, remark };
             const result = await apiCall("POST", "user/withdraw", payload);
             if (result?.success) {
+                toastSuccess(result.msg || `Withdraw successful for ${selectedUserW.username}`);
     const newWithdraw = (localSelectedUser.withdraw || 0) + Number(amount);
     const newBalance = (localSelectedUser.balance || 0) - Number(amount);
 

@@ -172,7 +172,7 @@ const DepositModal = ({ onClose, selectedUser, updateAccountListDeposit }) => {
         Number(localAdminData?.deposit || 0) +
         Number(localAdminData?.profitlossbalance || 0) +
         Number(localAdminData?.exposure || 0) -
-        Number(localAdminData?.downLineDeposit || 0);  
+        Number(localAdminData?.downLineDeposit || 0);
 
     const userBase =
         Number(localSelectedUser?.deposit || 0) +
@@ -180,7 +180,6 @@ const DepositModal = ({ onClose, selectedUser, updateAccountListDeposit }) => {
         Number(localSelectedUser?.exposure || 0) +
         Number(localSelectedUser?.downLineDeposit || 0);
 
-        
     const totalAfterDeposit = amount ? adminBase - Number(amount) : adminBase;
     const Afterdeposit = amount ? userBase + Number(amount) : userBase;
 
@@ -188,10 +187,18 @@ const DepositModal = ({ onClose, selectedUser, updateAccountListDeposit }) => {
         e.preventDefault();
         setErrors({ amount: !amount, txnPassword: !txnPassword, remark: !remark });
 
-        if (!amount || !txnPassword || !remark) {
-            toastError("All fields are required");
-            return;
-        }
+        if (!amount) {
+        toastError("Amount is required");
+        return;
+    }
+    if (!txnPassword) {
+        toastError("Transaction password is required");
+        return;
+    }
+    // if (!remark) {
+    //     toastError("Remark is required");
+    //     return;
+    // }
 
         if (!selectedUser?._id) {
             toastError("User not selected properly, try again");

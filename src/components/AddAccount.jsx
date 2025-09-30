@@ -50,7 +50,7 @@ const schema = yup.object().shape({
     then: () => yup.number().required("Bet Delay is required"),
     otherwise: () => yup.number().nullable(),
   }),
-  
+ 
 });
 
 // const AddAccount = () => {
