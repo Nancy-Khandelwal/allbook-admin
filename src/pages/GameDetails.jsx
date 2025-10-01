@@ -25,6 +25,7 @@ const GameDetails = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const prevSubscriptionRef = useRef(null);
+ const { toastSuccess, toastError } = useToast();
   const { apiCall } = useApi();
   const { socket } = useUser();
   const { sportId, matchId, marketId } = useParams();
@@ -48,7 +49,7 @@ const GameDetails = () => {
         `sports/getMatchDetail/${matchId}${specialGames.includes(sportId) ? `?marketId=${marketId}` : ""}`
       );
       if (!response?.success) {
-
+	toastError("There are no markets available in this game!");
         navigate("/market-analysis");
         throw new Error("No markets available");
       }
@@ -125,11 +126,33 @@ const GameDetails = () => {
     const handleMarketUpdate = (data) => {
       if (!data?.bmi) return;
       const marketIdStr = String(data.bmi);
-      setMarketOddsData(prev => ({
-        ...prev,
-        [marketIdStr]: { ...data }
-      }));
-    };
+    //   setMarketOddsData(prev => ({
+    //     ...prev,
+    //     [marketIdStr]: { ...data }
+    //   }));
+
+    setMarketOddsData((prev) => ({
+				...prev,
+				[marketIdStr]: {
+					...data,
+					rt: data.rt?.map((runner) => ({
+						...runner,
+						changed: !prev[marketIdStr]?.rt?.some(
+							(r) => r.ri === runner.ri && r.rt === runner.rt
+						),
+					})),
+				},
+			}));
+			setTimeout(() => {
+				setMarketOddsData((prev2) => ({
+					...prev2,
+					[marketIdStr]: {
+						...prev2[marketIdStr],
+						rt: prev2[marketIdStr]?.rt?.map((r) => ({ ...r, changed: false })),
+					},
+				}));
+			}, 300);
+          };   
     socket.on("marketUpdate", handleMarketUpdate);
     return () => socket.off("marketUpdate", handleMarketUpdate);
   }, [socket, marketOddsData]);

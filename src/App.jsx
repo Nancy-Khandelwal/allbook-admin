@@ -9,7 +9,7 @@ import ListOfClients from './pages/ListOfClients';
 import AssignAgent from './pages/AssignAgent';
 import AccountList from './pages/AccountList';
 import AccountStatement from './pages/AccountStatement';
-import CurrentBets from './pages/CurrentBets';
+import CurrentBets from './pages/Currentbets';
 import GenernalReport from './pages/GenernalReport';
 import GameReport from './pages/GameReport';
 import CasinoReport from './pages/CasinoReport';

@@ -15848,6 +15848,17 @@ h6 {
   transform: unset;
 }
 
+.blink {
+    animation: blinking 300ms !important;
+    -webkit-animation: blinking 300ms !important;
+    background-color: #FFC01A !important;
+}
+@keyframes blinking {
+    100% {
+        background-color: #FFC01A !important;
+    }
+}
+
 .blink-message {
   padding: 5px 0;
   display: flex;

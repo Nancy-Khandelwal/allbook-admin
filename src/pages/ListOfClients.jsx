@@ -46,14 +46,14 @@ const ListOfClients = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showChangeStatusModal, setShowChangeStatusModal] = useState(false);
 
-  const fetchAccounts = async (page = 1, searchQuery = "") => {
+  const fetchAccounts = async (page = 1,limit=entriesPerPage, searchQuery = "") => {
     setLoading(true);
     try {
       const token = cookies.get("auth-token");
 
       const queryParams = new URLSearchParams({
         page,
-        limit: entriesPerPage,
+        limit,
 
       });
       if (searchQuery) queryParams.append("search", searchQuery);
@@ -72,7 +72,7 @@ const ListOfClients = () => {
         setAccountList(result.data);
         setCurrentPage(page);
         setTotalPages(result.totalPages || 1);
-        
+
         setTotalRecords(result.totalRecords || 0);
       } else {
         setAccountList([]);
@@ -148,8 +148,8 @@ const ListOfClients = () => {
 
 
   useEffect(() => {
-    fetchAccounts(1, search);
-  }, [entriesPerPage]);
+    fetchAccounts(1,entriesPerPage, search);
+  }, []);
 
 
 
@@ -177,7 +177,7 @@ const ListOfClients = () => {
   // };
   const goToPage = (page) => {
     if (page >= 1 && page <= totalPages) {
-      fetchAccounts(page, search);
+      fetchAccounts(page, entriesPerPage,search);
     }
   };
 
@@ -202,7 +202,7 @@ const ListOfClients = () => {
       {(showDepositModal || showWithdrawModal || showExposureModal || showcraditModal || showPasswordModal || showChangeStatusModal) && (<div id="__BVID__241___BV_modal_backdrop_" className="modal-backdrop"></div>)}
       {
         addAccount ? (
-          <AddAccount redirectionUrl={location.pathname} onBack={() => setAddAccount(false)}  />
+          <AddAccount redirectionUrl={location.pathname} onBack={() => setAddAccount(false)} />
         ) : (
           <div className='listing-grid'>
             <div className='row'>
@@ -224,29 +224,29 @@ const ListOfClients = () => {
                     <div className="row row5">
                       <div className="col-md-6 mb-2 search-form">
                         <div className="d-inline-block mr-2">
-                        {/* <button type="button" className="btn buttons-pdf btn-danger !bg-[#cb0606] hover:!bg-[#f14646]" onClick={() => exportData("pdf")}>
+                          {/* <button type="button" className="btn buttons-pdf btn-danger !bg-[#cb0606] hover:!bg-[#f14646]" onClick={() => exportData("pdf")}>
                         <Icon icon="prime:file-pdf" width="24" height="24" style={{ color: '#fff', display: 'inline' }} />PDF
                     </button> */}
-                    <ExportButtons exportData={exportData} />
-                     <div id="export_1756727337031" className="d-inline-block">
-                      {/* <button type="button" className="btn buttons-excel btn-success inline-block !bg-[#217346] hover:!bg-[#2ca579]"
+                          <ExportButtons exportData={exportData} />
+                          <div id="export_1756727337031" className="d-inline-block">
+                            {/* <button type="button" className="btn buttons-excel btn-success inline-block !bg-[#217346] hover:!bg-[#2ca579]"
                       onClick={() => exportData("csv")} >
                         <Icon icon="prime:file-excel" width="24" height="24" style={{ color: '#fff', display: 'inline' }} />Excel
                     </button> */}
-                    </div>
-                    </div>
-                    </div> <div className="col-md-6 text-right mb-2"></div></div>
+                          </div>
+                        </div>
+                      </div> <div className="col-md-6 text-right mb-2"></div></div>
                     <div className="row"><div className="col-sm-12 col-md-6"><div id="tickets-table_length" className="dataTables_length"><label className="d-inline-flex items-center text-[14px] leading-[15px]">
                       Show&nbsp;
                       <select className="custom-select custom-select-sm" id="__BVID__249"
-                       value={entriesPerPage}
-          onChange={(e) => {
-            const newSize = Number(e.target.value);
-            setEntriesPerPage(newSize);
-            setCurrentPage(1); // reset to first page
-            fetchAccounts(1, search); // fetch data dynamically
-          }}
-                      >{[10,25, 50, 100, 250, 500, 750, 1000].map((size) => (
+                        value={entriesPerPage}
+                        onChange={(e) => {
+                          const newSize = Number(e.target.value);
+                          setEntriesPerPage(newSize);
+                          setCurrentPage(1); // reset to first page
+                          fetchAccounts(1,newSize, search); // fetch data dynamically
+                        }}
+                      >{[10, 25, 50, 100, 250, 500, 750, 1000].map((size) => (
                         <option key={size} value={size}>
                           {size}
                         </option>
@@ -263,9 +263,9 @@ const ListOfClients = () => {
                           onChange={(e) => setSearch(e.target.value)}
                         />
                         {/* <input name="searchuser" type="search" placeholder="Search..." className="form-control form-control-sm ml-2 form-control !text-[14px] !leading-[15px]" id="__BVID__250" />  */}
-                        <button type="submit" id="loaddata" className="btn btn-primary ml-2" onClick={() => fetchAccounts(1, search)}>Load</button> <button type="submit" id="loaddata" className="btn btn-secondary ml-2" onClick={() => {
+                        <button type="submit" id="loaddata" className="btn btn-primary ml-2" onClick={() => fetchAccounts(1,entriesPerPage, search)}>Load</button> <button type="submit" id="loaddata" className="btn btn-secondary ml-2" onClick={() => {
                           setSearch("");
-                          fetchAccounts(1, "");
+                          fetchAccounts(1, entriesPerPage,"");
                         }}>Reset</button></label></div></div></div>
                     <div className="table-responsive mb-0"><div className="table no-footer list-clients table-responsive-sm"><table id="eventsListTbl" role="table" aria-busy="false" aria-colcount="8" className="table b-table table-striped table-bordered"><thead role="rowgroup" className=""><tr role="row" className="">
                       <th role="columnheader" scope="col" tabIndex="0" aria-colindex="1" aria-sort="none" className="position-relative"><div>User Name</div><span className="sr-only"> (Click to sort ascending)</span></th><th role="columnheader" scope="col" tabIndex="0" aria-colindex="2" aria-sort="none" className="position-relative text-right"><div>Credit Referance</div><span className="sr-only"> (Click to sort ascending)</span></th><th role="columnheader" scope="col" aria-colindex="3" className=""><div>U st</div></th><th role="columnheader" scope="col" aria-colindex="4" className=""><div>B st</div></th><th role="columnheader" scope="col" aria-colindex="5" className=""><div>Exposure Limit</div></th><th role="columnheader" scope="col" aria-colindex="6" className=""><div>Deafult (%)</div></th><th role="columnheader" scope="col" aria-colindex="7" className=""><div>Account Type</div></th><th role="columnheader" scope="col" aria-colindex="8" className=""><div>Action</div></th></tr></thead>
@@ -422,14 +422,14 @@ const ListOfClients = () => {
                                 </button>
                               </li>
                             ))} */}
-<li className="page-item active">
-  <span
-    className="page-link"
-    style={{ backgroundColor: "#2e4a3b", borderColor: "#2e4a3b", color: "#fff" }}
-  >
-    {currentPage}
-  </span>
-</li>
+                            <li className="page-item active">
+                              <span
+                                className="page-link"
+                                style={{ backgroundColor: "#2e4a3b", borderColor: "#2e4a3b", color: "#fff" }}
+                              >
+                                {currentPage}
+                              </span>
+                            </li>
 
 
                             <li
@@ -467,24 +467,26 @@ const ListOfClients = () => {
         )
       }
 
-      {showDepositModal && <DepositModal onClose={handleClose} selectedUser={selectedUser}   updateAccountListDeposit={(userId, newDeposit, newBalance) => {
-      setAccountList((prev) =>
-        prev.map((user) =>
-          user._id === userId
-            ? { ...user, deposit: newDeposit, balance: newBalance }
-            : user
-        )
-      );
-    }}/>}
-      {showWithdrawModal && <WithdrawModal onClose={handleClose} selectedUserW={selectedUserW}    updateAccountListWithdraw={(userId, newWithdraw, newBalance) => {
-      setAccountList((prev) =>
-        prev.map((user) =>
-          user._id === userId
-            ? { ...user, withdraw: newWithdraw, balance: newBalance }
-            : user
-        )
-      );
-    }}/>}
+      {showDepositModal && <DepositModal onClose={handleClose} selectedUser={selectedUser} updateAccountListDeposit={(userId, newDeposit, newBalance) => {
+        setAccountList((prev) =>
+          prev.map((user) =>
+            user._id === userId
+              ? { ...user, deposit: newDeposit, balance: newBalance }
+              : user
+          )
+        );
+      }} />}
+      {showWithdrawModal && <WithdrawModal  onClose={handleClose} selectedUserW={selectedUserW}
+       updateAccountListWithdraw={(userId, newWithdraw, newBalance) => {
+        setAccountList((prev) =>
+          prev.map((user) =>
+            user._id === userId
+              ? { ...user, deposit: newWithdraw, balance: newBalance }
+              : user
+          )
+        );
+      }} 
+      />}
       {showExposureModal && <ExposureLimitModal onClose={handleClose} selectedUserl={selectedUserl} setSelectedUserl={setSelectedUserl} updateAccountList={updateAccountList} />}
       {showcraditModal && <CarditModal onClose={handleClose} selectedUserc={selectedUserc}
         updateAccountListCredit={(userId, newCredit) => {
