@@ -5,135 +5,6 @@ import useApi from "../components/hooks/useApi";
 import Cookies from "universal-cookie";
 import useToast from "./hooks/useToast";
 
-// const WithdrawModal = ({onClose, selectedUserWW,updateAccountListWithdraw}) => {
-//   const { userData, verifyUser } = useUser();
-//     const [amount, setAmount] = useState('');
-//     const [txnPassword, setTxnPassword] = useState('');
-//     const [remark, setRemark] = useState('');
-//     const [loading, setLoading] = useState(false);
-//     const { toastSuccess, toastError } = useToast();
-//     const cookies = new Cookies();
-//     const { apiCall } = useApi();
-//      const [updatedUserData, setUpdatedUserData] = useState(userData);
-//       const [updatedselectedUserW, setUpdatedselectedUserW] = useState(selectedUserWW);
-//    const [errors, setErrors] = useState({
-//         amount: false,
-//         txnPassword: false,
-//         remark: false,
-//     });
-
-//       const localUserData = useMemo(() => userData, [userData]);
-//   const localselectedUserW = useMemo(() => selectedUserWW, [selectedUserWW]);
-
-//    useEffect(() => {
-//         if (!userData || !userData.username) {
-//             verifyUser();
-//         }
-//         setUpdatedUserData(userData);
-//         setUpdatedselectedUserW(selectedUserWW);
-//     }, [userData, selectedUserWW, verifyUser]);
-
-//     const deposit = selectedUserWW?.deposit || 0;
-//     const profitlossbalance = selectedUserWW?.profitlossbalance || 0;
-//     const exposure = selectedUserWW?.exposure || 0;
-//   const downLineDeposit = selectedUserWW?.downLineDeposit ||0;
-
-//    useEffect(() => {
-//       setUpdatedUserData(userData);
-//   }, [userData]);
-
-//   useEffect(() => {
-//       setUpdatedselectedUserW(selectedUserWW);
-//   }, [selectedUserWW]);
-// const Userdata =
-//     Number(updatedUserData?.deposit || 0) +
-//     Number(updatedUserData?.profitlossbalance || 0) +
-//     Number(updatedUserData?.exposure || 0)+ Number(updatedselectedUserW?.downLineDepositunt || 0);
-// console.log("Userdata", amount ,Userdata)
-// // totalAfterDeposit ko update karo:
-//  const adminBase =
-//     Number(localUserData?.deposit || 0) +
-//     Number(localUserData?.profitlossbalance || 0) +
-//     Number(localUserData?.exposure || 0) -
-//     Number(localUserData?.downLineDeposit || 0);
-
-//   const userBase =
-//     Number(localselectedUserW?.deposit || 0) +
-//     Number(localselectedUserW?.profitlossbalance || 0) +
-//     Number(localselectedUserW?.exposure || 0) +
-//     Number(localselectedUserW?.downLineDeposit || 0);
-
-//   // Calculate values based on input amount
-//   const totalAfterDeposit = amount ? adminBase + Number(amount) : adminBase;
-//   const Afterdeposit = amount ? userBase - Number(amount) : userBase;
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-//    setErrors({
-//             amount: !amount,
-//             txnPassword: !txnPassword,
-//             remark: !remark,
-//         });
-//         if (!amount || !txnPassword) {
-//             toastError("Amount and Transaction Password are required");
-//             return;
-//         }
-//          if (!remark) {
-//         toastError("Remark is required");
-//         return;
-//     }
-
-//         if (!selectedUserWW?._id) {
-//             toastError("User not selected properly, try again");
-//             return;
-//         }
-
-//         try {
-//             setLoading(true);
-
-//             const payload = {
-//                 userId: selectedUserWW._id,
-//                 amount,
-//                 txnPassword,
-//                 remark,
-//             };
-
-//             const result = await apiCall("POST", "user/withdraw", payload);
-
-//             if (result && result.success) {
-//                 toastSuccess(result.msg || `Withdraw successful for ${selectedUserWW.username}`);
-//                 const refreshedLogin = await verifyUser();
-//     if (refreshedLogin) setUpdatedUserData(refreshedLogin);
-
-//     // Parent ke account list me update karo
-//     if (updateAccountListWithdraw) {
-//         const newWithdraw = (selectedUserWW.withdraw || 0) + Number(amount);
-//         const newBalance = (selectedUserWW.balance || 0) - Number(amount);
-
-//         updateAccountListWithdraw(selectedUserWW._id, newWithdraw, newBalance);
-
-//         // Local modal state ko bhi update karo, taaki turant reflect ho
-//         setUpdatedselectedUserW(prev => ({
-//             ...prev,
-//             withdraw: newWithdraw,
-//             balance: newBalance
-//         }));
-//     }
-
-//   setAmount('');
-//   setTxnPassword('');
-//   setRemark('');
-//   onClose();
-
-//             } else {
-//                 toastError((result && result.msg) || "Withdraw failed");
-//             }
-//         } catch (err) {
-//             toastError(err?.message || "Server error");
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
 const WithdrawModal = ({
   onClose,
   selectedUserW,
@@ -179,7 +50,7 @@ const WithdrawModal = ({
     Number(updatedselectedUserW?.exposure || 0) +
     Number(updatedselectedUserW?.downLineDeposit || 0);
 
-  // 🔹 Separate calculation method
+  
   const calculateWithdraw = (enteredAmount) => {
     const amt = Number(enteredAmount) || 0;
     if (amt <= 0) {

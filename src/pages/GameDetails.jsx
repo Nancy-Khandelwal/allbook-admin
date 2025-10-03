@@ -70,12 +70,13 @@ const GameDetails = () => {
       ].reduce((acc, id) => ({ ...acc, [id]: {} }), {});
       setMarketOddsData(initialMarkets);
       // Join room & subscribe
+      try {
+        socket.emit("joinRoom", { room: match.matchId });
+      
       chunkAndEmit("subscribeMarkets", match.matchId, marketId ? [marketId] : match.marketIds);
       chunkAndEmit("subscribeMarkets", match.matchId, match.bookmakerRef?.map(b => b.marketTypeId));
       chunkAndEmit("subscribeMarkets", match.matchId, match.fancyRef?.map(f => f.marketTypeId));
-      try {
-        socket.emit("joinRoom", { room: match.matchId });
-      } catch (err) {
+     } catch (err) {
         console.log(err)
       }
       setLoading(false);
@@ -84,7 +85,7 @@ const GameDetails = () => {
       console.error(err);
       setLoading(false);
     }
-  }, [apiCall, matchId, sportId, marketId, socket, chunkAndEmit, navigate]);
+  }, [ matchId, sportId, marketId, socket]);
   // --- Leave previous match subscriptions ---
   const leavePreviousMatch = useCallback(
     (prevMatchId, prevMarketIds = [], prevBookmaker = [], prevFancy = []) => {
@@ -102,16 +103,19 @@ const GameDetails = () => {
     },
     [socket, chunkAndEmit]
   );
-  useEffect(() => {
-    if (!socket) return;
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
-      getMatchDetails();
-    });
-    return () => {
-      socket.off("connect");
-    };
-  }, [socket]);
+useEffect(()=>{
+  console.log("socket",socket);
+},[]);
+  // useEffect(() => {
+  //    if (!socket) return;
+  //    socket.on("connect", () => {
+  //      console.log("Socket connected:", socket.id);
+  //     getMatchDetails();
+  //    });
+  //    return () => {
+  //      socket.off("connect");
+  //    };
+  // }, [socket]);
   // --- Fetch match details & join socket rooms ---
   // --- Fetch bet history ---
   const getBetHistory = useCallback(async (mId) => {
@@ -122,40 +126,135 @@ const GameDetails = () => {
   // --- Handle socket market updates ---
   useEffect(() => {
     if (!socket) return;
-    socket?.emit("joinRoom", { room: 28871646 });
-    const handleMarketUpdate = (data) => {
-      if (!data?.bmi) return;
-      const marketIdStr = String(data.bmi);
-    //   setMarketOddsData(prev => ({
+  
+  
+
+  const handleMarketUpdate = (data) => {
+    if (!data?.bmi) return;
+
+    const marketIdStr = String(data.bmi);
+    //  setMarketOddsData(prev => ({
     //     ...prev,
     //     [marketIdStr]: { ...data }
     //   }));
+    // setMarketOddsData((prev) => ({
+		// 		...prev,
+		// 		[marketIdStr]: {
+		// 			...data,
+		// 			rt: data.rt?.map((runner) => {
+    //         const incrementRuner = prev[marketIdStr]?.rt?.some(
+		// 					(r) => r.ri === runner.ri && r.rt > runner.rt
+		// 				)
+    //         const decrementRuner = prev[marketIdStr]?.rt?.some(
+    //           (r) => r.ri === runner.ri && r.rt < runner.rt
+    //         )
+    //         const prevRunner = prev[marketIdStr]?.rt?.some(r => r.ri === runner.ri && r.rt === runner.rt);
+    //               console.log("runnervalues", prevRunner, incrementRuner, decrementRuner);
+    //         let changeColor = "";
 
+    //       // if (prevRunner) {
+    //         if (incrementRuner) {
+    //           changeColor = "blink";  // odd increased
+             
+    //         } else if (decrementRuner) {
+    //           changeColor = "bg-error";    // odd decreased
+           
+    //         }
+    //        else {
+            
+    //         changeColor = ""; // first-time default blink
+    //       }
+    //         return {
+		// 				...runner,
+		// 				changeColor,
+		// 			}}),
+		// 		},
+			// }));
     setMarketOddsData((prev) => ({
-				...prev,
-				[marketIdStr]: {
-					...data,
-					rt: data.rt?.map((runner) => ({
-						...runner,
-						changed: !prev[marketIdStr]?.rt?.some(
-							(r) => r.ri === runner.ri && r.rt === runner.rt
-						),
-					})),
-				},
-			}));
-			setTimeout(() => {
-				setMarketOddsData((prev2) => ({
-					...prev2,
-					[marketIdStr]: {
-						...prev2[marketIdStr],
-						rt: prev2[marketIdStr]?.rt?.map((r) => ({ ...r, changed: false })),
-					},
-				}));
-			}, 300);
-          };   
-    socket.on("marketUpdate", handleMarketUpdate);
-    return () => socket.off("marketUpdate", handleMarketUpdate);
-  }, [socket, marketOddsData]);
+      ...prev,
+      [marketIdStr]: {
+        // ...data,
+        rt: data.rt?.map((runner, index) => {
+          const prevRunner = prev[marketIdStr]?.rt?.find(r => r.ri === runner.ri && r.pr == runner.pr && r.ib == runner.ib);
+          //debug
+          // if(runner.ri == "74756005" && runner.pr == 1 && !runner.ib ){
+          //   console.log("runnervalues",runner.rt,prevRunner?.rt,runner.rt > prevRunner?.rt, runner.rt < prevRunner?.rt);
+
+          // }
+
+          let changeColor = "";
+
+          if (prevRunner) {
+            if (runner.rt > prevRunner.rt) {
+              changeColor = "bg-success";  // odd increased
+             
+            } else if (runner.rt < prevRunner.rt) {
+              changeColor = "bg-danger";    // odd decreased
+           
+            }
+          } else {
+            
+            changeColor = ""; // first-time default blink
+          }
+
+          return {
+            ...runner,
+            
+            changeColor
+          };
+        }),
+      },
+    }));
+
+    // Reset changed flag after 300ms
+    setTimeout(() => {
+      setMarketOddsData((prev2) => ({
+        ...prev2,
+        [marketIdStr]: {
+          ...prev2[marketIdStr],
+          rt: prev2[marketIdStr]?.rt?.map((r) => ({ ...r, changeColor: "" })),
+        },
+      }));
+    }, 300);
+  };
+
+  socket.on("marketUpdate", handleMarketUpdate);
+  return () => socket.off("marketUpdate", handleMarketUpdate);
+}, [socket]);
+
+  //   const handleMarketUpdate = (data) => {
+  //     if (!data?.bmi) return;
+  //     const marketIdStr = String(data.bmi);
+  //   //   setMarketOddsData(prev => ({
+  //   //     ...prev,
+  //   //     [marketIdStr]: { ...data }
+  //   //   }));
+
+  //   setMarketOddsData((prev) => ({
+	// 			...prev,
+	// 			[marketIdStr]: {
+	// 				...data,
+	// 				rt: data.rt?.map((runner) => ({
+	// 					...runner,
+	// 					changed: !prev[marketIdStr]?.rt?.some(
+	// 						(r) => r.ri === runner.ri && r.rt === runner.rt
+	// 					),
+	// 				})),
+	// 			},
+	// 		}));
+	// 		setTimeout(() => {
+	// 			setMarketOddsData((prev2) => ({
+	// 				...prev2,
+	// 				[marketIdStr]: {
+	// 					...prev2[marketIdStr],
+	// 					rt: prev2[marketIdStr]?.rt?.map((r) => ({ ...r, changed: false })),
+	// 				},
+	// 			}));
+	// 		}, 300);
+  //         };   
+  //   socket.on("marketUpdate", handleMarketUpdate);
+  //   return () => socket.off("marketUpdate", handleMarketUpdate);
+  // }, [socket, marketOddsData]);
   // --- Initial load & handle subscriptions ---
   useEffect(() => {
     // leave old subscriptions
@@ -172,7 +271,7 @@ const GameDetails = () => {
         leavePreviousMatch(matchId, marketIds, bookmakerRef, fancyRef);
       }
     };
-  }, [matchId, sportId, marketId]);
+  }, [matchId, sportId, marketId, socket]);
   if (loading) return <Loading />;
   if (!matchDetails) return null;
   const tournamentWinner = matchDetails.marketTypesRef || [];

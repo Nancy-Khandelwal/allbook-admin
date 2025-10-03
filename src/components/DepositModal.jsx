@@ -46,7 +46,7 @@ const DepositModal = ({ onClose, selectedUser, updateAccountListDeposit }) => {
     Number(updatedSelectedUser?.exposure || 0) +
     Number(updatedSelectedUser?.downLineDeposit || 0);
 
-  // 🔹 Separate calculation method
+ 
   const calculateDeposit = (enteredAmount) => {
     const amt = Number(enteredAmount) || 0;
     if(amt<=0){

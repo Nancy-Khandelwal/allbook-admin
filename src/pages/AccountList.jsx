@@ -50,75 +50,6 @@ const AccountList = () => {
 
     const capitalizeFirst = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : "";
 
-//     const fetchActiveUsers = async (page = 1,  search = "") => {
-//         setLoading(true);
-//         try {
-//             const token = cookies.get("auth-token");
-//              const queryParams = new URLSearchParams({
-//         page,
-//         limit: entriesPerPage,
-
-//       });
-//       if (search) queryParams.append("search", search);
-
-     
-//             const result = await apiCall(
-//                 "GET",
-//                 `user/active_child_list?${queryParams.toString()}`,
-//                 null,
-//                 {
-//                     Authorization: `Bearer ${token}`,
-//                     "Content-Type": "application/json",
-//                 }
-//             );
-
-//             if (result && result.success) {
-//                 setAccountList(result.data || []);
-//                  setCurrentPage(page);
-//                setTotalPages(result.totalPages || 1);
-//                setTotalRecords(result.totalRecords || 0);
-//             } else {
-//                   setTotalPages(1);
-//         setTotalRecords(0);
-//             }
-//         } catch (err) {
-//               setAccountList([]);
-//       setTotalPages(1);
-//       setTotalRecords(0);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     const fetchInactiveUsers = async (page = 1, limit = entriesPerPage, search = "") => {
-//         setLoading(true);
-//         try {
-//             const token = cookies.get("auth-token");
-//             const result = await apiCall(
-//                 "GET",
-//                 `user/inactive_child_list?search=${search}&page=${page}&limit=${limit}`,
-//                 null,
-//                 {
-//                     Authorization: `Bearer ${token}`,
-//                     "Content-Type": "application/json",
-//                 }
-//             );
-
-//             if (result && result.success) {
-//                 setAccountList(result.data || []);
-//                 setTotalRecords(result.totalCount || 0);
-//                 setCurrentPage(page);
-//             } else {
-//                 setAccountList([]);
-//                 setTotalRecords(0);
-//             }
-//         } catch (err) {
-//             console.error("Error fetching inactive users:", err);
-//             setAccountList([]);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
 
 //   useEffect(() => {
 //     fetchActiveUsers(1, search);
@@ -296,7 +227,7 @@ const AccountList = () => {
     }
   };
 
-  // Fetch whenever tab, page, entriesPerPage, or searchTerm changes
+  
   useEffect(() => {
     fetchUsers(activeTab, currentPage, entriesPerPage, searchTerm);
   }, [activeTab, currentPage, entriesPerPage, searchTerm]);
@@ -331,49 +262,7 @@ const AccountList = () => {
     );
   };
 
-    // const handleSearch = () => {
-    //     setCurrentPage(1);
-    //     if (activeTab === "active-user") {
-    //         fetchActiveUsers(1, entriesPerPage, searchTerm);
-    //     } else {
-    //         fetchInactiveUsers(1, entriesPerPage, searchTerm);
-    //     }
-    // };
-
-    // const handleReset = () => {
-    //     setSearchTerm("");
-    //     setCurrentPage(1);
-    //     if (activeTab === "active-user") {
-    //         fetchActiveUsers(1, entriesPerPage, "");
-    //     } else {
-    //         fetchInactiveUsers(1, entriesPerPage, "");
-    //     }
-    // };
-
-    // const handleClose = () => {
-    //     setShowDepositModal(false);
-    //     setShowWithdrawModal(false);
-    //     setShowExposureModal(false);
-    //     setShowCraditModal(false);
-    //     setShowPasswordModal(false);
-    //     setShowChangeStatusModal(false);
-    // }
-    // const updateAccountList = (userId, newLimit) => {
-    //     setAccountList(prev =>
-    //         prev.map(user =>
-    //             user._id === userId ? { ...user, exposerLimit: newLimit } : user
-    //         )
-    //     );
-    // };
-
-    // const totalPages = Math.ceil(accountList.length / entriesPerPage);
-
-    // const totalPages = Math.ceil(totalRecords / entriesPerPage);
-
-    // const paginatedData = accountList.slice(
-    //     (currentPage - 1) * entriesPerPage,
-    //     currentPage * entriesPerPage
-    // );
+    
 
 
     const location = useLocation();
@@ -635,7 +524,7 @@ const AccountList = () => {
                             )
                         );
                     }} />}
-                        {showWithdrawModal && <WithdrawModal  onClose={handleClose} selectedUserW={selectedUserW}
+                  {showWithdrawModal && <WithdrawModal  onClose={handleClose} selectedUserW={selectedUserW}
        updateAccountListWithdraw={(userId, newWithdraw, newBalance) => {
         setAccountList((prev) =>
           prev.map((user) =>

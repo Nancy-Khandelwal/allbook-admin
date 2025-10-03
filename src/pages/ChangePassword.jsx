@@ -47,7 +47,7 @@ const handleNewPasswordChange = async (e) => {
     setErrors((prev) => ({ ...prev, newPassword: err.message }));
   }
 
-  // Re-validate confirm password if already typed
+  
   if (reNewPassword) {
     try {
       await changePasswordSchema.validateAt("reNewPassword", {
