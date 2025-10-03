@@ -635,16 +635,17 @@ const AccountList = () => {
                             )
                         );
                     }} />}
-                    {showWithdrawModal && <WithdrawModal onClose={handleClose}  selectedUserW={{selectedUserW}}
-  updateAccountListWithdraw={(userId, newWithdraw, newBalance) => {
-    setAccountList(prev =>
-      prev.map(user =>
-        user._id === userId
-          ? { ...user, deposit: newWithdraw, balance: newBalance }
-          : user
-      )
-    );
-  }} />}
+                        {showWithdrawModal && <WithdrawModal  onClose={handleClose} selectedUserW={selectedUserW}
+       updateAccountListWithdraw={(userId, newWithdraw, newBalance) => {
+        setAccountList((prev) =>
+          prev.map((user) =>
+            user._id === userId
+              ? { ...user, deposit: newWithdraw, balance: newBalance }
+              : user
+          )
+        );
+      }} 
+      />}
                     {showExposureModal && <ExposureLimitModal onClose={handleClose} selectedUserl={selectedUserl} setSelectedUserl={setSelectedUserl} updateAccountList={updateAccountList} />}
                     {showcraditModal && <CarditModal onClose={handleClose} selectedUserc={selectedUserc}
                         updateAccountListCredit={(userId, newCredit) => {
