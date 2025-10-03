@@ -640,7 +640,7 @@ const AccountList = () => {
     setAccountList(prev =>
       prev.map(user =>
         user._id === userId
-          ? { ...user, withdraw: newWithdraw, balance: newBalance }
+          ? { ...user, deposit: newWithdraw, balance: newBalance }
           : user
       )
     );
