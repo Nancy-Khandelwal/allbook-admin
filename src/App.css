@@ -8351,6 +8351,9 @@ body.login .login-bg {
   text-align: center;
   background-color: var(--bg-table);
   color: var(--text-table);
+  border-width: 1px;
+  border-color: light-dark;
+  border-radius: 2px
 }
 
 .login-auth .featured-box-login {

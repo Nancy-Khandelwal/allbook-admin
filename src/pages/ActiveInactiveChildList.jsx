@@ -85,7 +85,7 @@ const ActiveInactiveChildList = () => {
     }
   };
 
-  // Fetch data when tab, page, or entriesPerPage change
+  
   useEffect(() => {
     if (parentId) fetchUsers(currentPage, entriesPerPage, searchTerm);
   }, [activeTab, entriesPerPage, currentPage, parentId]);
@@ -219,9 +219,9 @@ const ActiveInactiveChildList = () => {
   };
 
 
-  // Pagination helpers
+  
   const totalPages = Math.ceil(totalRecords / entriesPerPage);
-  const paginatedData = accountList; // backend already paginates
+  const paginatedData = accountList; 
 
   const goToPage = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);

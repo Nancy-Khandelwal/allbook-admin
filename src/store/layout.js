@@ -5,7 +5,6 @@ const initialRtl = () => {
   return themeConfig.layout.isRTL;
 };
 
-
 const initialState = {
   isRTL: initialRtl(),
   darkMode: themeConfig.layout.darkMode,

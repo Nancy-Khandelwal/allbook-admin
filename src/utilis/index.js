@@ -16,61 +16,60 @@ export const formatNumber = (num) => {
   return String(num);
 };
 
-
 export const statusLabels = {
-	1: "Active",
-	2: "Inactive",
-	3: "Suspended",
-	4: "Closed",
-	9: "Ball Running",
+  1: "Active",
+  2: "Inactive",
+  3: "Suspended",
+  4: "Closed",
+  9: "Ball Running",
 };
 
 export function formatDateTime(date) {
-	const pad = (n) => n.toString().padStart(2, "0");
+  const pad = (n) => n.toString().padStart(2, "0");
 
-	const day = pad(date.getDate());
-	const month = pad(date.getMonth() + 1); // Months are 0-based
-	const year = date.getFullYear();
+  const day = pad(date.getDate());
+  const month = pad(date.getMonth() + 1); // Months are 0-based
+  const year = date.getFullYear();
 
-	const hours = pad(date.getHours());
-	const minutes = pad(date.getMinutes());
-	const seconds = pad(date.getSeconds());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+  const seconds = pad(date.getSeconds());
 
-	return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 }
 
 export const getRowClass = (
-	rowSuspended,
-	suspendedStatus,
-	sportId,
-	specialGames
+  rowSuspended,
+  suspendedStatus,
+  sportId,
+  specialGames
 ) => {
-	if (!rowSuspended) return "market-row";
-	const hasLabel = !!statusLabels?.[suspendedStatus?.st];
-	const extra = hasLabel ? "" : " removed";
-	return `market-row suspended-row${extra}`;
+  if (!rowSuspended) return "market-row";
+  const hasLabel = !!statusLabels?.[suspendedStatus?.st];
+  const extra = hasLabel ? "" : " removed";
+  return `market-row suspended-row${extra}`;
 };
 
 export const getRowTooltip = (
-	rowSuspended,
-	suspendedStatus,
-	runner,
-	sportId,
-	specialGames
+  rowSuspended,
+  suspendedStatus,
+  runner,
+  sportId,
+  specialGames
 ) => {
-	console.log("runner status",runner.status,typeof sportId );
-	if (rowSuspended) return "SUSPENDED";
-console.log("suspendedStatus",rowSuspended);
-	if (
-		!specialGames.includes(sportId) &&
-		runner?.status &&
-		runner?.status !== ""
-	) {
-		return runner.status;
-	}
+  console.log("runner status", runner.status, typeof sportId);
+  if (rowSuspended) return "SUSPENDED";
+  console.log("suspendedStatus", rowSuspended);
+  if (
+    !specialGames.includes(sportId) &&
+    runner?.status &&
+    runner?.status !== ""
+  ) {
+    return runner.status;
+  }
 
-	return (
-		statusLabels?.[suspendedStatus?.st] ??
-		(!specialGames.includes(sportId) ? "LOSER" : "REMOVED")
-	);
+  return (
+    statusLabels?.[suspendedStatus?.st] ??
+    (!specialGames.includes(sportId) ? "LOSER" : "REMOVED")
+  );
 };

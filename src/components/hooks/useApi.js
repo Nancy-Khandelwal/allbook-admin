@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apiEndpoint as baseUrl } from "../constant/common";
+// import { apiEndpoint as baseUrl } from "../constant/common";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import useToast from "./useToast"
@@ -28,7 +28,8 @@ const useApi = () => {
 
       
       const config = {
-        url: `${baseUrl}${path}`,
+        // url: `${baseUrl}${path}`,
+         url: `${import.meta.env.VITE_API_BASEURL}/api/${path}`,
         method,
         headers: {
           "Content-Type": contentType,
@@ -50,7 +51,7 @@ const useApi = () => {
         ) {
           cookies.remove("auth-token");
           navigate("/sign-in");
-          toastError("Your session has expired. Please login again");
+          // toastError("Your session has expired. Please login again");
           return { success: false, msg: res.msg, data: [] };
         }
 
@@ -63,7 +64,7 @@ const useApi = () => {
          if (statusCode === 401) {
         cookies.remove("auth-token");
         navigate("/sign-in");
-        toastError("Your session has expired. Please login again");
+        // toastError("Your session has expired. Please login again");
         return { success: false, msg: "Unauthorized", data: [] };
       }
 
