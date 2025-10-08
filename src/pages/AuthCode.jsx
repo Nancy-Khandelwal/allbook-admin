@@ -46,9 +46,9 @@ const otpRef = useRef();
       if (res?.success) {
         setAuthType(res?.data?.authType || null);
         if (res?.data?.authType === "telegram_auth") {
-          toastSuccess(res?.msg || "Telegram code sent!");
+          // toastSuccess(res?.msg || "Telegram code sent!");
         } else if (res?.data?.authType === "google_auth") {
-          toastSuccess(res?.msg || "Google Auth ready!");
+          // toastSuccess(res?.msg || "Google Auth ready!");
         }
       } else {
         toastError(res?.msg || "Failed to generate code");
