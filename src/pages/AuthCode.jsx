@@ -146,7 +146,8 @@ const otpRef = useRef();
 
         <div className="featured-box-login featured-box-secundary default">
           <h3 className="text-center">
-            Security Code Verification Using Telegram App
+             Security Code Verification Using {authType === "google_auth" ? "Google Authenticator" : "Telegram Bot"}{" "}
+            {/* Security Code Verification Using Telegram App */}
           </h3>
 
           <div className="mt-3 text-center">
@@ -157,8 +158,17 @@ const otpRef = useRef();
               </a>
             </span>
           </div>
-
+ <div
+          
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "15px",
+          }}
+        >
           <OtpInputBox  ref={otpRef} onComplete={handleOtpComplete} />
+          </div>
         </div>
       </div>
     </div>

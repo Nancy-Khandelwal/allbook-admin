@@ -205,7 +205,7 @@ const SecureAuthVerification = () => {
           </div>
         </div>{" "}
         <div>
-          <div className="card-body">
+          <div className="card-body !p-0">
             <div className="text-center">
               <b>Secure Auth Verification Status:</b>
               
@@ -246,7 +246,7 @@ const SecureAuthVerification = () => {
                   Please select below option to enable secure auth verification
                 </div>{" "}
                 <div className="casino-report-tabs mt-3">
-                  <ul className="nav nav-tabs">
+                  <ul className="nav nav-tabs !flex-nowrap">
                     <li className="nav-item pointer">
                       <a
                         className={`nav-link ${
@@ -287,7 +287,7 @@ const SecureAuthVerification = () => {
             ) : null}{" "}
             <div className="tab-content mt-4"> </div>
             {/* mobile app */}
-            {activeTab === "mobile-app" && !userData.twoFactorAuth && data && (
+            {activeTab === "mobile-app" && !userData?.twoFactorAuth && data && (
               <div className="tab-content mt-4 !border-none">
                 <div className="tab-pane mobile-app active">
                   {" "}
@@ -296,8 +296,8 @@ const SecureAuthVerification = () => {
                       Please enter below auth code in your 'Secure Auth
                       Verification App'.
                     </div>{" "}
-                    <div className="mt-3">
-                      <div className="verify-code1">
+                    <div className="mt-3 flex flex-col items-center w-full">
+                      <div className="verify-code1 !pl-[10px]">
                         {/* {authCode} */}
                         {data && (
                           <div className="mt-4">
@@ -307,22 +307,22 @@ const SecureAuthVerification = () => {
                                 className="border rounded-lg m-3 w-56"
                               />
                             </div>
-                            <div className="flex items-center my-5 mx-10">
+                            <div className="flex items-center my-5">
                               <div className="flex-grow border-t border-slate-400"></div>
                               <span className="mx-3 text-black text-xs !tracking-[0px]">
                                 OR
                               </span>
                               <div className="flex-grow border-t border-slate-400"></div>
                             </div>
-                            <div className="flex items-center gap-1 w-full max-w-md flex items-center my-5 mx-10">
-                              <label className="whitespace-nowrap font-semibold mr-10">
+                            <div className="flex items-center justify-center gap-1 w-full max-w-md my-5 !mx-auto">
+                              <label className="whitespace-nowrap font-semibold mr-2 md:mr-10 !tracking-normal">
                                 Secret:
                               </label>
                               <Textinput
                                 type="text"
                                 value={data.secret}
                                 readOnly
-                                className="flex-grow border rounded px-2 py-1 text-sm border-t "
+                                className="flex-grow border rounded px-2 py-1 text-sm border-t !tracking-normal"
                               />
                               <CopyToClipboard
                                 text={data.secret}
@@ -344,10 +344,13 @@ const SecureAuthVerification = () => {
                           
                             {isQrScanned && (
                               <div className="mt-6">
-                                <h6 className="text-center font-bold mb-2">
-                                  Enter 6-digit OTP Code
+                                <h6 className="text-center font-bold !tracking-normal !text-[13px] text-wrap">
+                                  Enter 6-digit OTP Code 
+																	Authenticator app to verify and enable 2-Step
+																	Verification.
+                                  
                                 </h6>
-                                <div className="flex justify-center login-auth">
+                                <div className="w-full flex justify-center login-auth">
                                   <OtpInputBox ref={otpRef} onComplete={handleToggle2FA1} />
                                 </div>
                               </div>

@@ -248,9 +248,27 @@ const Navbar = () => {
                     <ul role="menu" tabIndex="-1" className="dropdown-menu !absolute !block !bottom-0 !left-0 !bg-[#fff] !h-full !rounded-[4px]" aria-labelledby="__BVID__66__BV_toggle_">
                       <div className="dropdown sm:hidden mx-1"><div className="bal-box"><span className="balance nowrap">Pts:
                       <span className="balance-value"><b>0</b></span> </span></div></div>  <Link to="javascript: void(0);" className="dropdown-item d-sm-none"><i className="fas fa-info-circle mr-1"></i> Rules
-                      </Link > <Link to="/secureauth" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#ffff]">
+                      </Link > 
+                         <Link
+                    to="/secureauth"
+                    onClick={() => {
+                      navigate("/secureauth");
+                      setOpenMenu(false);
+                      setUserItem(false);
+                    }}
+                    className="dropdown-item !bg-[#ffff]"
+                  >
+                      {/* <Link to="/secureauth" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#ffff]"> */}
                         Secure Auth Verification
-                      </Link > <Link to="/change-password" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#fff]">
+                      </Link > 
+                      <Link
+                    to="/change-password"
+                    onClick={() => {
+                      navigate("/change-password");
+                      setOpenMenu(false);
+                      setUserItem(false);
+                    }}className="dropdown-item !bg-[#fff]">
+                      {/* <Link to="/change-password" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#fff]"> */}
                         Change Password
                       </Link > <Link to="/sign-in" onClick={() => navigate('/sign-in')} className="dropdown-item !bg-[#fff] !rounded-b-[4px]">
                         Logout
@@ -419,7 +437,8 @@ const Navbar = () => {
                     userItem && (
                       <ul role="menu" tabIndex="-1" className="dropdown-menu !absolute !block !bottom-0 !left-0 !bg-[#2e4a3b] !h-full !rounded-[4px]" aria-labelledby="__BVID__66__BV_toggle_"><div className="dropdown sm:hidden mx-1"><div className="bal-box"><span className="balance nowrap">Pts:
                         <span className="balance-value"><b>0</b></span> </span></div></div>  <Link to="javascript: void(0);" className="dropdown-item d-sm-none"><i className="fas fa-info-circle mr-1"></i> Rules
-                        </Link > <Link to="/secureauth" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#2e4a3b]">
+                        </Link > 
+                        <Link to="/secureauth" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#2e4a3b]">
                           Secure Auth Verification
                         </Link > <Link to="/change-password" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#2e4a3b]">
                           Change Password
@@ -443,7 +462,8 @@ const Navbar = () => {
                   userItem && (
                     <ul role="menu" tabIndex="-1" className="dropdown-menu !absolute !block !bottom-0 !left-0 !bg-[#2e4a3b] !h-full !rounded-[4px]" aria-labelledby="__BVID__66__BV_toggle_"><div className="dropdown sm:hidden mx-1"><div className="bal-box"><span className="balance nowrap">Pts:
                       <span className="balance-value"><b>0</b></span> </span></div></div>  <Link to="javascript: void(0);" className="dropdown-item d-sm-none"><i className="fas fa-info-circle mr-1"></i> Rules
-                      </Link > <Link to="/secureauth" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#2e4a3b]">
+                      </Link >
+                       <Link to="/secureauth" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#2e4a3b]">
                         Secure Auth Verification
                       </Link > <Link to="/change-password" onClick={() => navigate('/secureauth')} className="dropdown-item !bg-[#2e4a3b]">
                         Change Password

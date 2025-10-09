@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useApi from "../components/hooks/useApi";
 import b9 from "@images/b9.png";
+import * as yup from "yup";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,10 +23,97 @@ const Login = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const [errors, setErrors] = useState({
+    newPassword: "",
+    reNewPassword: "",
+  });
 
+    const passwordRule = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+  const changePasswordSchema = yup.object().shape({
+    newPassword: yup
+      .string()
+      .required("New Password is required")
+      .min(8, "New Password must be at least 8 characters")
+      .matches(
+        passwordRule,
+        "New Password must contain at least: 1 uppercase letter, 1 lowercase letter, 1 number"
+      ),
+    reNewPassword: yup
+      .string()
+      .required("Confirm Password is required")
+      .min(8, "Confirm Password must be at least 8 characters")
+      .oneOf([yup.ref("newPassword"), null], "Confirm Password does not match"),
+  });
+
+
+  // handle new password validation
+  const handleNewPasswordChange = async (e) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, newPassword: value }));
+
+    try {
+      await changePasswordSchema.validateAt("newPassword", {
+        newPassword: value,
+      });
+      setErrors((prev) => ({ ...prev, newPassword: "" }));
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, newPassword: err.message }));
+    }
+
+    // re-validate confirm password if already typed
+    if (formData.reNewPassword) {
+      try {
+        await changePasswordSchema.validateAt("reNewPassword", {
+          newPassword: value,
+          reNewPassword: formData.reNewPassword,
+        });
+        setErrors((prev) => ({ ...prev, reNewPassword: "" }));
+      } catch (err) {
+        setErrors((prev) => ({ ...prev, reNewPassword: err.message }));
+      }
+    }
+  };
+  const handleReNewPasswordChange = async (e) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, reNewPassword: value }));
+
+    try {
+      await changePasswordSchema.validateAt("reNewPassword", {
+        newPassword: formData.newPassword,
+        reNewPassword: value,
+      });
+      setErrors((prev) => ({ ...prev, reNewPassword: "" }));
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, reNewPassword: err.message }));
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submitted with data:", formData);
+    
+    const { oldPassword, newPassword, reNewPassword } = formData;
+
+    if (!oldPassword || !newPassword || !reNewPassword) {
+      toastError("All fields are required");
+      return;
+    }
+
+    // validate both passwords before submit
+    try {
+      await changePasswordSchema.validate(
+        { newPassword, reNewPassword },
+        { abortEarly: false }
+      );
+    } catch (validationError) {
+      const validationErrors = {};
+      validationError.inner.forEach((err) => {
+        validationErrors[err.path] = err.message;
+      });
+      setErrors(validationErrors);
+      toastError("Please correct the highlighted errors.");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
@@ -142,10 +230,14 @@ const Login = () => {
                     type="password"
                     name="newPassword"
                     value={formData.newPassword}
-                    onChange={handleChange}
+                     onChange={handleNewPasswordChange}
                     className="form-control"
                   />
-                  <span className="error"></span>
+                   {errors.newPassword && (
+                    <div className="text-danger text-sm mt-1">
+                      {errors.newPassword}
+                    </div>
+                  )}
                 </div>{" "}
                 <div className="form-group relative">
                   <label className="user-email-text !text-[14px] !text-[#000] !leading-[18px]">
@@ -155,11 +247,15 @@ const Login = () => {
                     type="password"
                     name="reNewPassword"
                     value={formData.reNewPassword}
-                    onChange={handleChange}
+                   onChange={handleReNewPasswordChange}
                     className="form-control"
                   />
 
-                  <span className="error"></span>
+                   {errors.reNewPassword && (
+                    <div className="text-danger text-sm mt-1">
+                      {errors.reNewPassword}
+                    </div>
+                  )}
                 </div>{" "}
                 <div className="form-group mb-0">
                   {/* <button type="submit" className="btn btn-submit btn-login" onClick={(e) => {e.preventDefault(); setSuccessfullyChangePassword(true);}}>

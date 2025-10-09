@@ -82,6 +82,7 @@ const OtpInputBox = forwardRef(
 						style={{
 							display: "flex",
 							alignItems: "center",
+						
 						}}
 					>
 						<input

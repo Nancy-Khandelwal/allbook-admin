@@ -6,6 +6,7 @@ import useToast from './hooks/useToast';
 import signinIcon from '@images/sign-in-icon.svg'
 import * as yup from "yup";
 
+
 const PasswordModal = ({ onClose, selectedUserp, updateAccountList2 }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

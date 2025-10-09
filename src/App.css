@@ -8356,6 +8356,22 @@ body.login .login-bg {
   border-radius: 2px
 }
 
+.login-auth1 input {
+  width: 70px;
+  height: 70px;
+  padding: 5px;
+  margin: 0 10px;
+  font-size: 30px;
+  border-radius: 4px;
+  border: 0;
+  text-align: center;
+  background-color: var(--bg-table);
+  color: var(--text-table);
+  border-width: 1px;
+  border-color: light;
+  border-radius: 2px
+}
+
 .login-auth .featured-box-login {
   padding: 20px;
   color: var(--text-table-header);
@@ -33536,7 +33552,7 @@ input[type="number"] {
     cursor: not-allowed;
 }
 .tab-content {
-    border: 1px solid #ced4da;
+    /* border: 1px solid #ced4da; */
     margin-top: -1px;
 }
 .credit-mdl .nav-item:first-child .tab-bg-warning {
