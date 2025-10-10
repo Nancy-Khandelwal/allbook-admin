@@ -58903,3 +58903,167 @@ input:disabled {
   }
 }
 
+.suspended-table {
+    position: relative;
+}
+
+.suspended-table::after {
+    content: attr(data-title);
+    background-color: #373636d6;
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+    position: absolute;
+    height: 100%;
+    width: 100% !important; 
+    right: 0;
+    top: 0;
+    cursor: not-allowed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .suspended-table2::after {
+    width: calc(58 * 6px) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .suspended-table2::after {
+    width: calc(85 * 6px) !important;
+  }
+}
+
+
+@media  (max-width: 1023px) {
+  .suspended-table1::after {
+    width: calc(58 * 6px) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .suspended-table1::after {
+    width: calc(85 * 6px) !important;
+  }
+}
+
+
+.market-odd-box.suspended {
+    position: relative;
+}
+
+.market-odd-box.suspended::after {
+    content: attr(data-title);
+    background-color: #373636d6;
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    position: absolute;
+    inset: 0;
+    cursor: not-allowed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 2;
+}
+/* .market-2 .suspended-row::after,
+.market-2 .suspended-table::after {
+    width: 160px;
+}
+
+.market-2.width30 .suspended-row::after,
+.market-2.width30 .suspended-table::after {
+    width: 160px;
+}
+
+  .market-2 .suspended-row::after,
+    .market-2 .suspended-table::after {
+        width: 40%;
+    }
+    .market-2.width30 .market-nation-detail {
+        width: calc(100% - 40%);
+    }
+    .market-2.width30 .suspended-row::after,
+    .market-2.width30 .suspended-table::after {
+        width: 40%;
+    }
+
+     .suspended-table::after {
+        font-size: 12px;
+    }
+
+    .market-3 .suspended-row::after,
+.market-3 .suspended-table::after {
+    width: 160px;
+}
+
+.market-4 .suspended-row:after,
+.market-4 .suspended-table:after,
+.market-13 .suspended-row:after,
+.market-13 .suspended-table:after {
+    width: 480px;
+}
+
+.market-5 .suspended-row::after,
+.market-5 .suspended-table::after {
+    width: 160px;
+    right: 160px;
+}
+
+.market-6 .suspended-row::after,
+.market-6 .suspended-table::after {
+    width: 240px;
+}
+
+.market-9 .suspended-row::after,
+.market-9 .suspended-table::after {
+    width: 80px;
+}
+
+
+.market-10 .suspended-row::after,
+.market-10 .suspended-table::after {
+    width: 160px;
+}
+
+
+.market-11 .suspended-row::after,
+.market-11 .suspended-table::after {
+    width: 160px;
+}
+
+
+
+.market-12 .suspended-row::after,
+.market-12 .suspended-table::after {
+    width: 480px;
+} */
+
+ /* .market-4 .suspendedtable:after, .market-13 .suspendedtable:after {
+    width: 508px;
+    height: 46px;
+} */
+
+@media only screen and (max-width: 767px) {
+
+
+     
+     .suspended-row::after,
+    .suspended-table::after {
+        font-size: 12px;
+    }
+    }
+
+    @media only screen and (min-width: 768px) and (max-width: 1199px) {
+
+    .suspended-row::after,
+    .suspended-table::after {
+        font-size: 13px;
+    }
+  }
