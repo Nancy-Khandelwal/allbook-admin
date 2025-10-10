@@ -136,10 +136,10 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
         method="post"
       >
         <div className="row">
-          <div className="col-6">
+          <div className="col-12 col-md-6">
             <h4 className="mb-4 col-12">Personal Detail</h4>
             <div className="row">
-              <div className="col-6">
+              <div className="col-12 col-sm-6">
                 <div className="form-group">
                   <label className="!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">
                     Client Name:
@@ -148,14 +148,14 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                     type="text"
                     {...register("username")}
                     placeholder="Client Name"
-                    className="form-control"
+                    className="form-control "
                   />
                   {errors.username && (
                     <span className="error">{errors.username.message}</span>
                   )}
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-12 col-sm-6">
                 <div className="form-group">
                   <label className="!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">
                     User Password:
@@ -164,14 +164,14 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                     type="password"
                     {...register("password")}
                     placeholder="User Password"
-                    className="form-control"
+                    className="form-control "
                   />
                   {errors.password && (
                     <span className="error">{errors.password.message}</span>
                   )}
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-12 col-sm-6">
                 <div className="form-group">
                   <label className="!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">
                     Retype Password:
@@ -180,14 +180,14 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                     type="password"
                     {...register("rePassword")}
                     placeholder="Retype Password"
-                    className="form-control"
+                    className="form-control "
                   />
                   {errors.rePassword && (
                     <span className="error">{errors.rePassword.message}</span>
                   )}
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-12 col-sm-6">
                 <div className="form-group">
                   <label className="!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">
                     Full Name:
@@ -196,14 +196,14 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                     type="text"
                     {...register("fullName")}
                     placeholder="Full Name"
-                    className="form-control"
+                    className="form-control "
                   />
                   {errors.fullName && (
                     <span className="error">{errors.fullName.message}</span>
                   )}
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-12 col-sm-6">
                 <div className="form-group">
                   <label className="!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">
                     City:
@@ -212,11 +212,11 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                     type="text"
                     {...register("city")}
                     placeholder="City"
-                    className="form-control"
+                    className="form-control "
                   />
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-12 col-sm-6">
                 <div className="form-group">
                   <label className="!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">
                     Phone:
@@ -226,14 +226,14 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                     {...register("phone")}
                     placeholder="Phone Number"
                     maxLength="15"
-                    className="form-control"
+                    className="form-control "
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="col-6">
+          <div className="col-12 col-md-6">
             <h4 className="mb-4 col-12">Account Detail</h4>
             <div className="row">
               <div className="col-6">
@@ -268,7 +268,7 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                   )}
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-12 col-sm-6">
                 <div className="form-group">
                   <label className="!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]">
                     Credit Reference:
@@ -277,7 +277,7 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                     type="number"
                     {...register("credit")}
                     placeholder="Credit Reference"
-                    className="form-control"
+                    className="form-control "
                     defaultValue={0}
                   />
                   {errors.credit && (
@@ -286,7 +286,7 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                 </div>
               </div>
               {role === "user" && (
-                <div className="col-6">
+                <div className="col-12 col-sm-6">
                   <div className="form-group">
                     <label
                       for=""
@@ -298,7 +298,7 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
                       type="text"
                       placeholder="Exposer Limit"
                       name="exposerlim"
-                      className="form-control"
+                      className="form-control "
                     />
                   </div>
                 </div>
