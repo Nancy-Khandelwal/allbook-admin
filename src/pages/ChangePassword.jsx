@@ -173,7 +173,7 @@ const handleReNewPasswordChange = async (e) => {
           {/* Submit Button */}
           <div className="form-group mt-4">
             <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-              {loading ? "Loading..." : "Change Password"}
+              {loading ? "Loading..." : "Load"}
             </button>
           </div>
         </form>

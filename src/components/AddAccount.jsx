@@ -402,9 +402,9 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
           )}
         </div>
 
-        <div className="row mt-4">
-          <div className="col-12">
-            <div className="form-group col-3 float-right">
+        <div className="row m-t-20">
+          <div className="col-md-12 col-md-4">
+            <div className="form-group float-right">
               <label
                 className="!text-[#1e1e1e] !text-[14px] !font-medium !leading-[15px]"
                 htmlFor="m_pwd"
@@ -425,7 +425,7 @@ const AddAccount = ({ onBack, redirectionUrl }) => {
         </div>
 
         <div className="row m-t-20">
-          <div className="col-md-12">
+          <div className="col-md-12 col-md-4">
             <div className="float-right">
               {/* Button preserved visually — only uses the defined `loading` state */}
               <div className="form-group text-center">
