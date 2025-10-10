@@ -173,7 +173,7 @@ useEffect(()=>{
     setMarketOddsData((prev) => ({
       ...prev,
       [marketIdStr]: {
-        // ...data,
+        ...data,
         rt: data.rt?.map((runner, index) => {
           const prevRunner = prev[marketIdStr]?.rt?.find(r => r.ri === runner.ri && r.pr == runner.pr && r.ib == runner.ib);
           //debug

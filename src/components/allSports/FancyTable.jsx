@@ -78,7 +78,7 @@ const FancyTable = ({
          
           <div class="bet-table-row justify-end">
             <div class="text-right nation-name"></div>{" "}
-            <div class="back bl-title d-none-mobile !w-[58px] lg:!w-[85px]">
+            <div class="back bl-title d-none-mobile !w-[58px] lg:!w-[85px] ">
               Back
             </div>{" "}
             <div class="lay bl-title d-none-mobile !w-[58px] lg:!w-[85px]">
